@@ -18,11 +18,11 @@ Route::get('/dashboard', function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Customer
-Route::get('/customer',[CustomerController::class,'customer']);
-Route::get('/customer/tambah_customer',[CustomerController::class,'tambah_customer']);
+Route::get('/customer',[CustomerController::class,'customer'])->middleware('auth')->name('customer');
+Route::get('/customer/tambah_customer',[CustomerController::class,'tambah_customer'])->middleware('auth')->name('customer');
 Route::post('/customer/store',[CustomerController::class,'store']);
 
-Route::get('/customer/edit_customer/{id}', [CustomerController::class,'edit_customer']);
+Route::get('/customer/edit_customer/{id}', [CustomerController::class,'edit_customer'])->middleware('auth')->name('customer');
 Route::post('/customer/update_customer/{id}', [CustomerController::class,'update_customer']);
 
 Route::get('/customer/delete_customer/{id}', [CustomerController::class,'destroy_customer']);
