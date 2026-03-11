@@ -1,0 +1,69 @@
+@extends('layout.rangka')
+
+@section('title', 'Dashboard - StayHub')
+
+@section('content')
+
+    <div class="judul-capt d-flex justify-content-between align-items-center">
+        <h1>User</h1>
+        <a href="/user/tambah_user" class="btn btn-ae">Tambah User</a>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="judul-table d-flex justify-content-between align-items-center">
+                        <h5>All User</h5>
+                        <form action="/user" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Cari user..." value="{{ request('search') }}">
+                                <button class="btn btn-ae" type="submit">
+                                    Cari
+                                </button>
+                                <a href="/user" class="btn btn-ae">Reset</a>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <div class="table-responsive-md">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="120" style="background-color: #8a76526c;">Nama</th>
+                                    <th width="120" style="background-color: #8a76526c;">Username</th>
+                                    {{-- <th width="120" style="background-color: #8a76526c;">Password</th> --}}
+                                    <th width="120" style="background-color: #8a76526c;text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($user as $c)
+                                    <tr>
+                                        <td>{{ $c->nama_user }}</td>
+                                        <td>{{ $c->username }}</td>
+                                        {{-- <td>{{ $c->password }}</td> --}}
+                                        <td style="text-align: center;">
+                                            <a href="/user/edit_user/{{ $c->iduser }}" class="btn btn-warning btn-sm mb-2">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <a href="/user/delete_user/{{ $c->iduser }}" class="btn btn-danger btn-sm mb-2">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $user->appends(request()->query())->links('vendor.pagination.custom') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
