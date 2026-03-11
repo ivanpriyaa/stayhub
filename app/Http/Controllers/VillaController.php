@@ -46,6 +46,24 @@ class VillaController extends Controller
         return redirect('/villa');
     }
 
+    public function edit_villa($id)
+    {
+        $villa = Villa::find($id);
+        return view('edit_villa', compact('villa'));
+    }
+
+    public function update_villa(Request $request, $id)
+    {
+        $villa = Villa::find($id);
+
+        $villa->update([
+            'nama_villa' => $request->nama_villa,
+            'alamat_villa' => $request->alamat_villa
+        ]);
+
+        return redirect('/villa');
+    }
+
     public function destroy_villa($id){
         $villa = Villa::find($id);
         $villa->delete();

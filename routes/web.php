@@ -29,5 +29,7 @@ Route::get('/customer/delete_customer/{id}', [CustomerController::class,'destroy
 //Villa
 Route::get('/villa',[VillaController::class,'villa'])->middleware('auth')->name('villa');
 Route::get('/villa/tambah_villa',[VillaController::class,'tambah_villa'])->middleware('auth')->name('villa');
+Route::get('/villa/edit_villa/{id}', [villaController::class,'edit_villa'])->middleware('auth')->name('villa');
+Route::post('/villa/update_villa/{id}', [villaController::class,'update_villa']);
 Route::post('/villa/store', [VillaController::class,'store']);
 Route::get('/villa/delete_villa/{id}', [VillaController::class,'destroy_villa']);
