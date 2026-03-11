@@ -20,7 +20,7 @@
                     <a href="{{ url('/customer') }}" class="nav-link inria-sans-regular"><i class="bi bi-people"></i></span> Customer</a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link inria-sans-regular"><i class="bi bi-buildings"></i></span> Villa Inventory</a>
+                    <a href="{{ url('/villa') }}" class="nav-link inria-sans-regular"><i class="bi bi-buildings"></i></span> Villa Inventory</a>
                 </li>
                 <li class="nav-item mb-1">
                     <a href="#" class="nav-link inria-sans-regular"><i class="bi bi-person"></i></span> Users</a>

@@ -27,7 +27,8 @@
                         <textarea name="alamat_customer" class="form-control"></textarea>
                     </div>
 
-                    <button class="btn btn-primary">Simpan</button>
+                    <button class="btn btn-ae">Simpan</button>
+                    <a href="/customer" class="btn btn-secondary">Kembali</a>
 
                 </form>
             </div>
