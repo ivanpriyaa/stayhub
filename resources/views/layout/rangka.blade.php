@@ -4,11 +4,12 @@
 @include('layout.head')
 
 <body>
+    <div class="sidebar-overlay"></div>
 
     <div class="d-flex">
 
         <!-- Sidebar -->
-        <div class="sidebar d-none d-md-block">
+        <div class="sidebar">
             <h4 class="inria-serif-bold logo mb-0" style="text-align: center;">StayHub</h4>
             <h4 class="itim-regular tagline" style="text-align: center;font-size: 15px;">Smart Booking Management</h4>
             <ul class="nav flex-column p-2">
@@ -54,9 +55,17 @@
     <script>
         const toggleBtn = document.getElementById('toggleSidebar');
         const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
 
         toggleBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('d-none');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        });
+
+        // Klik overlay untuk menutup sidebar
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
         });
     </script>
 </body>

@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    public function customer()
+    public function customer(Request $request)
     {
-        $customer = Customer::all();
+        $search = $request->search;
+
+        $customer = Customer::when($search, function ($query, $search) {
+            return $query->where('nama_customer', 'like', "%$search%")
+                ->orWhere('notelp_customer', 'like', "%$search%");
+        })
+            ->paginate(10);
+
         return view('customer', compact('customer'));
+        // $customer = Customer::paginate(10);
+        // return view('customer', ['customer' => $customer]);
     }
 
     public function tambah_customer()
