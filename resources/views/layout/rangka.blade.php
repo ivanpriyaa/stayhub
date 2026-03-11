@@ -23,7 +23,7 @@
                     <a href="#" class="nav-link inria-sans-regular"><i class="bi bi-buildings"></i></span> Villa Inventory</a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link inria-sans-regular"><i class="bi bi-person"></i></span> Users</a>
+                    <a href="{{ url('/user') }}" class="nav-link inria-sans-regular"><i class="bi bi-person"></i></span> Users</a>
                 </li>
                 <li class="nav-item mb-1">
                     <form id="logout-form" method="POST" action="{{ route('logout') }}">

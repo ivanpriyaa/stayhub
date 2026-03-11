@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,12 +18,20 @@ Route::get('/dashboard', function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//user
+Route::get('/user', [UserController::class, 'user'])->middleware('auth')->name('customer');
+Route::get('/user/tambah_user', [UserController::class, 'tambah_user'])->middleware('auth')->name('customer');
+Route::post('/user/store', [UserController::class, 'store']);
+Route::get('/user/edit_user/{id}', [UserController::class, 'edit_user'])->middleware('auth')->name('customer');
+Route::post('/user/update_user/{id}', [UserController::class, 'update_user']);
+Route::get('/user/delete_user/{id}', [UserController::class, 'destroy_user']);
+
 // Customer
-Route::get('/customer',[CustomerController::class,'customer'])->middleware('auth')->name('customer');
-Route::get('/customer/tambah_customer',[CustomerController::class,'tambah_customer'])->middleware('auth')->name('customer');
-Route::post('/customer/store',[CustomerController::class,'store']);
+Route::get('/customer', [CustomerController::class, 'customer'])->middleware('auth')->name('customer');
+Route::get('/customer/tambah_customer', [CustomerController::class, 'tambah_customer'])->middleware('auth')->name('customer');
+Route::post('/customer/store', [CustomerController::class, 'store']);
 
-Route::get('/customer/edit_customer/{id}', [CustomerController::class,'edit_customer'])->middleware('auth')->name('customer');
-Route::post('/customer/update_customer/{id}', [CustomerController::class,'update_customer']);
+Route::get('/customer/edit_customer/{id}', [CustomerController::class, 'edit_customer'])->middleware('auth')->name('customer');
+Route::post('/customer/update_customer/{id}', [CustomerController::class, 'update_customer']);
 
-Route::get('/customer/delete_customer/{id}', [CustomerController::class,'destroy_customer']);
+Route::get('/customer/delete_customer/{id}', [CustomerController::class, 'destroy_customer']);
