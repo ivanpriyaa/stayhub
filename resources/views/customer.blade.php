@@ -20,6 +20,7 @@
                             <button class="btn btn-ae" type="submit">
                                 Cari
                             </button>
+                            <a href="/customer" class="btn btn-ae">Reset</a>
                         </div>
                     </form>
                 </div>
