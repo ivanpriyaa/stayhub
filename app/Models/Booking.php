@@ -16,12 +16,22 @@ class Booking extends Model
 
     protected $fillable = [
         'idbooking',
+        'tglbooking',
         'idvilla',
         'idcustomer',
-        'tglbooking',
-        'pic',
         'tglcekin',
         'tglcekout',
-        'tglcekout'
+        'pic',
+        'note'
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'idcustomer');
+    }
+
+    public function villa()
+    {
+        return $this->belongsTo(Villa::class, 'idvilla');
+    }
 }

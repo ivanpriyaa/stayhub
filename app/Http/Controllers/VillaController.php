@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Villa;
 use Illuminate\Http\Request;
 
 class VillaController extends Controller
 {
-    public function villa(Request $request){
+    public function villa(Request $request)
+    {
         $search = $request->search;
 
         $villa = Villa::when($search, function ($query, $search) {
@@ -64,7 +66,8 @@ class VillaController extends Controller
         return redirect('/villa');
     }
 
-    public function destroy_villa($id){
+    public function destroy_villa($id)
+    {
         $villa = Villa::find($id);
         $villa->delete();
 
