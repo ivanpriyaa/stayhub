@@ -113,6 +113,10 @@ body {
   top: 0;
 }
 
+.button .btn-menu {
+  display: none !important;
+}
+
 .sidebar .logo {
   margin-top: 10px;
   color: #8A7650;
@@ -205,8 +209,10 @@ body {
   margin-top: 20px;
 }
 
+
+
 /* Hanya untuk mobile */
-@media (max-width: 767.98px) {
+@media (max-width: 900px) {
   .sidebar {
     position: fixed;
     top: 0;
@@ -223,6 +229,10 @@ body {
 
   .sidebar.show {
     transform: translateX(0);
+  }
+
+  .button .btn-menu {
+    display: block !important;
   }
 
   /* overlay */
