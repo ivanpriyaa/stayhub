@@ -25,6 +25,11 @@
                 <li class="nav-item mb-1">
                     <a href="{{ url('/user') }}" class="nav-link inria-sans-regular"><i class="bi bi-person"></i></span> Users</a>
                 </li>
+                <hr>
+                <li class="nav-item mb-1">
+                    <a href="{{ url('/booking') }}" class="nav-link inria-sans-regular"><i class="bi bi-building-add"></i></span> Booking Villa</a>
+                </li>
+                <hr>
                 <li class="nav-item mb-1">
                     <form id="logout-form" method="POST" action="{{ route('logout') }}">
                         @csrf

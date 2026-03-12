@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
@@ -42,3 +43,7 @@ Route::get('/villa/edit_villa/{id}', [villaController::class,'edit_villa'])->mid
 Route::post('/villa/update_villa/{id}', [villaController::class,'update_villa']);
 Route::post('/villa/store', [VillaController::class,'store']);
 Route::get('/villa/delete_villa/{id}', [VillaController::class,'destroy_villa']);
+
+// Booking
+Route::get('/booking',[BookingController::class,'booking'])->middleware('auth')->name('booking');
+Route::get('/booking/tambah_booking',[BookingController::class,'tambah_booking'])->middleware('auth')->name('booking');
