@@ -94,7 +94,8 @@
 }
 
 .tombole:hover {
-  background-color: grey;
+  box-shadow: 0 0 14px .25rem rgb(255 152 1 / 39%);
+  background-color: #ffaa30;
   color: white;
 }
 
@@ -111,6 +112,10 @@ body {
   background-color: #fff;
   position: sticky;
   top: 0;
+}
+
+.button .btn-menu {
+  display: none !important;
 }
 
 .sidebar .logo {
@@ -132,6 +137,14 @@ body {
 }
 
 .nav-link:hover {
+  border-left: 3px solid #8A7650;
+  background-color: #EFEFEF;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: #8A7650;
+}
+
+.nav-link.active {
   border-left: 3px solid #8A7650;
   background-color: #EFEFEF;
   border-top-right-radius: 10px;
@@ -163,6 +176,8 @@ body {
   border-color: #8A7650;
   color: #8A7650;
 }
+
+
 
 .pagination .page-link {
   color: #8A7650;
@@ -197,8 +212,10 @@ body {
   margin-top: 20px;
 }
 
+
+
 /* Hanya untuk mobile */
-@media (max-width: 767.98px) {
+@media (max-width: 900px) {
   .sidebar {
     position: fixed;
     top: 0;
@@ -215,6 +232,10 @@ body {
 
   .sidebar.show {
     transform: translateX(0);
+  }
+
+  .button .btn-menu {
+    display: block !important;
   }
 
   /* overlay */
