@@ -20,16 +20,27 @@
             <h4 class="itim-regular tagline" style="text-align: center;font-size: 15px;">Smart Booking Management</h4>
             <ul class="nav flex-column p-2">
                 <li class="nav-item mb-1">
-                    <a href="{{ url('/dashboard') }}" class="nav-link inria-sans-regular"><i class="bi bi-house-door"></i></span> Home</a>
+                    <a href="{{ url('/dashboard') }}" class="nav-link inria-sans-regular {{ request()->is('dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-house-door"></i> Home
+                    </a>
                 </li>
+
                 <li class="nav-item mb-1">
-                    <a href="{{ url('/customer') }}" class="nav-link inria-sans-regular"><i class="bi bi-people"></i></span> Customer</a>
+                    <a href="{{ url('/customer') }}" class="nav-link inria-sans-regular {{ request()->is('customer*') ? 'active' : '' }}">
+                        <i class="bi bi-people"></i> Customer
+                    </a>
                 </li>
+
                 <li class="nav-item mb-1">
-                    <a href="{{ url('/villa') }}" class="nav-link inria-sans-regular"><i class="bi bi-buildings"></i></span> Villa Inventory</a>
+                    <a href="{{ url('/villa') }}" class="nav-link inria-sans-regular {{ request()->is('villa*') ? 'active' : '' }}">
+                        <i class="bi bi-buildings"></i> Villa Inventory
+                    </a>
                 </li>
+
                 <li class="nav-item mb-1">
-                    <a href="{{ url('/user') }}" class="nav-link inria-sans-regular"><i class="bi bi-person"></i></span> Users</a>
+                    <a href="{{ url('/user') }}" class="nav-link inria-sans-regular {{ request()->is('user*') ? 'active' : '' }}">
+                        <i class="bi bi-person"></i> Users
+                    </a>
                 </li>
                 <li class="nav-item mb-1">
                     <form id="logout-form" method="POST" action="{{ route('logout') }}">

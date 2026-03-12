@@ -139,6 +139,14 @@ body {
   color: #8A7650;
 }
 
+.nav-link.active {
+  border-left: 3px solid #8A7650;
+  background-color: #EFEFEF;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  color: #8A7650;
+}
+
 /* Konten menyesuaikan lebar */
 .content {
   flex: 1;
