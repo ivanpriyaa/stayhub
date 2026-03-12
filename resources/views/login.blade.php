@@ -23,7 +23,6 @@
         .login__icon {
             position: absolute;
             top: 18px;
-            left: 21px;
             color: #D4A245;
         }
 
@@ -42,6 +41,12 @@
         .login__input::placeholder {
             color: #3d3d3d;
             font-weight: 400;
+        }
+
+        .login__input:focus {
+            border: 2px solid #d9aa4b;
+            outline: 0;
+            box-shadow: 0 0 6px .25rem rgb(205 135 34 / 39%);
         }
 
 
@@ -94,8 +99,8 @@
             }
 
             /* .card {
-                                                                                                                                                                        display: none;
-                                                                                                                                                                    } */
+                                                                                                                                                                                                                                        display: none;
+                                                                                                                                                                                                                                    } */
 
         }
 
@@ -169,13 +174,12 @@
                     @csrf
                     <div class="mb-3">
                         <div class="login__field">
-                            <i class="login__icon bi bi-person-fill"></i>
-                            <input type="text" class="login__input" placeholder="Username" name="username" required style="text-decoration: none" autocomplete="off">
+                            <i class="login__icon bi bi-person-fill" style="left: 21px;"></i>
+                            <input type="text" class="login__input form-cont" placeholder="Username" name="username" required style="text-decoration: none" autocomplete="off">
                         </div>
                         <div class="login__field">
-                            <i class="login__icon bi bi-lock-fill"></i>
+                            <i class="login__icon bi bi-lock-fill" style="left: 21px;"></i>
                             <input type="password" id="password" class="login__input" class="form-control" placeholder="Password" name="password">
-
                             <span class="login__icon" onclick="togglePassword()" style="cursor:pointer; display: flex; justify-content: end; right: 22px;">
                                 <i class="bi bi-eye" id="eyeIcon"></i>
                             </span>

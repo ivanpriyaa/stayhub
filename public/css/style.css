@@ -94,7 +94,8 @@
 }
 
 .tombole:hover {
-  background-color: grey;
+  box-shadow: 0 0 14px .25rem rgb(255 152 1 / 39%);
+  background-color: #ffaa30;
   color: white;
 }
 
@@ -175,6 +176,8 @@ body {
   border-color: #8A7650;
   color: #8A7650;
 }
+
+
 
 .pagination .page-link {
   color: #8A7650;

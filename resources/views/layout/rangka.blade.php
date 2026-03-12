@@ -16,8 +16,10 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
+
             <h4 class="inria-serif-bold logo mb-0" style="text-align: center;">StayHub</h4>
             <h4 class="itim-regular tagline" style="text-align: center;font-size: 15px;">Smart Booking Management</h4>
+
             <ul class="nav flex-column p-2">
                 <li class="nav-item mb-1">
                     <a href="{{ url('/dashboard') }}" class="nav-link inria-sans-regular {{ request()->is('dashboard') ? 'active' : '' }}">
