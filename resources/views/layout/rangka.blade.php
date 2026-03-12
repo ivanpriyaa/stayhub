@@ -3,6 +3,12 @@
 
 @include('layout.head')
 
+@push('styles')
+    <style>
+        /*  */
+    </style>
+@endpush
+
 <body>
     <div class="sidebar-overlay"></div>
 
