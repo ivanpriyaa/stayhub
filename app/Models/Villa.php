@@ -18,7 +18,8 @@ class Villa extends Model
     protected $fillable = [
         'idvilla',
         'nama_villa',
-        'alamat_villa'
+        'alamat_villa',
+        'harga_villa'
     ];
     public function booking()
     {

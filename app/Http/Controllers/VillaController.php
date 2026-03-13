@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\Villa;
 use Illuminate\Http\Request;
 
@@ -42,6 +41,7 @@ class VillaController extends Controller
         Villa::create([
             'idvilla' => $kode,
             'nama_villa' => $request->nama_villa,
+            'harga_villa' => $request->harga_villa,
             'alamat_villa' => $request->alamat_villa
         ]);
 
@@ -60,6 +60,7 @@ class VillaController extends Controller
 
         $villa->update([
             'nama_villa' => $request->nama_villa,
+            'harga_villa' => $request->harga_villa,
             'alamat_villa' => $request->alamat_villa
         ]);
 

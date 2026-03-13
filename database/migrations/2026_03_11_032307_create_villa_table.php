@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('idvilla')->primary();
             $table->string('nama_villa');
             $table->string('alamat_villa');
+            $table->integer('harga_villa')->unsigned();
             $table->timestamps();
         });
     }

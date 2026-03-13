@@ -20,8 +20,9 @@ return new class extends Migration
             $table->dateTime('tglcekin');
             $table->dateTime('tglcekout');
             $table->string('note');
+            $table->integer('harga')->unsigned();
+            $table->integer('total_harga')->unsigned();
             $table->timestamps();
-
             $table->foreign('idvilla')->references('idvilla')->on('villa');
             $table->foreign('idcustomer')->references('idcustomer')->on('customers');
         });

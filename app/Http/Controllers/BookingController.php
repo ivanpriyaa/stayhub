@@ -11,17 +11,29 @@ class BookingController extends Controller
 {
     public function booking(Request $request)
     {
-        $search = $request->search;
+        $query = Booking::with(['villa', 'customer']);
 
-        $search = $request->search;
+        if ($request->input('search')) {
+            $search = $request->input('search');
 
-        $booking = Booking::join('villa', 'booking.idvilla', '=', 'villa.idvilla')
-            ->when($search, function ($query, $search) {
-                return $query->where('villa.nama_villa', 'like', "%$search%")
-                    ->orWhere('villa.alamat_villa', 'like', "%$search%");
-            })
-            ->select('booking.*', 'villa.nama_villa', 'villa.alamat_villa')
-            ->paginate(10);
+            $query->where(function ($q) use ($search) {
+
+                // Cari di tabel villa
+                $q->whereHas('villa', function ($villa) use ($search) {
+                    $villa->where('nama_villa', 'like', "%$search%")
+                        ->orWhere('alamat_villa', 'like', "%$search%");
+                })
+
+                    // Cari di tabel customer
+                    ->orWhereHas('customer', function ($customer) use ($search) {
+                        $customer->where('nama_customer', 'like', "%$search%")
+                            ->orWhere('notelp_customer', 'like', "%$search%")
+                            ->orWhere('alamat_customer', 'like', "%$search%");
+                    });
+            });
+        }
+
+        $booking = $query->paginate(50);
 
         return view('booking', compact('booking'));
     }
@@ -57,8 +69,8 @@ class BookingController extends Controller
 
     public function store(Request $request)
     {
-
-        // dd($request);
+        $total_harga = preg_replace('/[^0-9]/', '', $request->total_harga);
+        // dd($request , $total_harga);
         $request->validate([
             'tglbooking' => 'required|date',
             'idvilla' => 'required',
@@ -114,10 +126,85 @@ class BookingController extends Controller
             'idcustomer' => $customer->idcustomer,
             'tglcekin' => $request->tglcekin,
             'tglcekout' => $request->tglcekout,
+            'harga' => $request->harga,
+            'total_harga' => $total_harga,
             'pic' => "hmm", // sesuaikan jika ada field pic
             'note' => $request->note,
         ]);
 
         return redirect('/booking')->with('success', 'Booking berhasil disimpan!');
+    }
+    public function edit_booking($id)
+    {
+        $booking = Booking::find($id);
+        $villa = Villa::orderBy('idvilla', 'asc')->get();
+
+        return view('edit_booking', compact('booking', 'villa'));
+    }
+
+    public function update_booking(Request $request, $id)
+    {
+        $total_harga = preg_replace('/[^0-9]/', '', $request->total_harga);
+        // dd($request, $total_harga);
+
+        $request->validate([
+            'tglbooking' => 'required|date',
+            'idvilla' => 'required',
+            'nama_customer' => 'required|string|max:255',
+            'notelp_customer' => 'required|string|max:20',
+            'tglcekin' => 'required',
+            'idcustomer' => 'nullable|string|max:255',
+            'tglcekout' => 'required|after:tglcekin',
+            'note' => 'nullable|string',
+        ]);
+
+        // Cari booking yang akan diedit
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        // Cek apakah customer sudah ada
+        $customer = Customer::where('idcustomer', $request->idcustomer)->first();
+
+        if (!$customer) {
+
+            // Generate ID customer baru
+            $cr = Customer::latest('idcustomer')->first();
+
+            if ($cr) {
+                $ambil = substr($cr->idcustomer, 3);
+                $nomor = (int) $ambil + 1;
+            } else {
+                $nomor = 1;
+            }
+
+            $kode = 'CUS' . str_pad($nomor, 4, "0", STR_PAD_LEFT);
+
+            // Simpan customer baru
+            $customer = Customer::create([
+                'idcustomer' => $kode,
+                'nama_customer' => $request->nama_customer,
+                'notelp_customer' => $request->notelp_customer,
+            ]);
+        }
+        // Update booking
+        $booking->update([
+            'tglbooking' => $request->tglbooking,
+            'idvilla' => $request->idvilla,
+            'idcustomer' => $customer->idcustomer,
+            'harga' => $request->harga,
+            'total_harga' => $total_harga,
+            'tglcekin' => $request->tglcekin,
+            'tglcekout' => $request->tglcekout,
+            'note' => $request->note,
+        ]);
+
+        return redirect('/booking')->with('success', 'Booking berhasil diperbarui!');
+    }
+
+    public function destroy_booking($id)
+    {
+        $booking = Booking::find($id);
+        $booking->delete();
+
+        return redirect('/booking');
     }
 }

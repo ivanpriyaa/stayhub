@@ -14,9 +14,11 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware('auth')->name('dashboard');
+
+Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -49,3 +51,6 @@ Route::get('/booking', [BookingController::class, 'booking'])->middleware('auth'
 Route::get('/booking/tambah_booking', [BookingController::class, 'tambah_booking'])->middleware('auth')->name('booking');
 Route::post('/booking/store', [BookingController::class, 'store'])->middleware('auth')->name('tmbhbooking');
 Route::get('/customers/search', [BookingController::class, 'search'])->name('customers.search');
+Route::get('/booking/edit_booking/{id}', [BookingController::class, 'edit_booking'])->middleware('auth')->name('editbook');
+Route::post('/booking/update_booking/{id}', [BookingController::class, 'update_booking']);
+Route::get('/booking/delete_booking/{id}', [BookingController::class, 'destroy_booking']);

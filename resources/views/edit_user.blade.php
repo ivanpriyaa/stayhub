@@ -27,8 +27,8 @@
                             <input type="password" name="password" class="form-control" value="">
                         </div>
 
-                        <button class="btn btn-primary">Simpan</button>
-
+                        <button class="btn btn-ae">Simpan</button>
+                        <a href="/user" class="btn btn-secondary">Kembali</a>
                     </form>
                 </div>
             </div>

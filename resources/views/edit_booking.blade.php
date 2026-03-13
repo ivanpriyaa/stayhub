@@ -3,7 +3,7 @@
 @section('title', 'Booking - StayHub')
 
 @section('content')
-    <h1>Tambah Booking</h1>
+    <h1>Edit Booking</h1>
 
     <div class="row mt-4">
         <div class="col">
@@ -13,19 +13,19 @@
                         <p style="color:red;text-align: center;">{{ session('error') }}</p>
                     @endif
 
-                    <form method="POST" action="/booking/store">
+                    <form method="POST" action="/booking/update_booking/{{ $booking->idbooking }}">
                         @csrf
                         <div class="mb-3">
                             <label>Tanggal Booking</label>
-                            <input type="date" name="tglbooking" class="form-control" required>
+                            <input type="date" name="tglbooking" class="form-control" value="{{ $booking->tglbooking }}">
                         </div>
 
                         <div class="mb-3">
                             <label>Nama Villa</label>
-                            <select class="form-select" name="idvilla" aria-label="Pilih Brand" id="villaSelect" required>
-                                <option disabled selected>Pilih Villa</option>
+                            <select class="form-select" name="idvilla" aria-label="Pilih Brand" id="villaSelect">
+                                <option disabled>Pilih Brand</option>
                                 @foreach ($villa as $v)
-                                    <option value="{{ $v->idvilla }}" data-harga="{{ $v->harga_villa }}">
+                                    <option value="{{ $v->idvilla }}" {{ $booking->idvilla == $v->idvilla ? 'selected' : '' }}>
                                         {{ $v->nama_villa }}
                                     </option>
                                 @endforeach
@@ -34,43 +34,44 @@
 
                         <div class="mb-3">
                             <label>Harga</label>
-                            <input type="text" name="harga" id="HargaVilla" class="form-control" required>
+                            <input type="text" name="harga" id="HargaVilla" class="form-control" value="{{ $booking->harga }}">
                         </div>
+
 
                         <div class="mb-3" id="custBaru">
                             <label>Nama Tamu</label>
-                            <input type="text" name="nama_customer" id="namaCustomerBaru" class="form-control" required>
-                            <input type="hidden" name="idcustomer" id="idCustomerHidden">
+                            <input type="text" name="nama_customer" id="namaCustomerBaru" class="form-control" value="{{ $booking->customer->nama_customer }}">
+                            <input type="hidden" name="idcustomer" id="idCustomerHidden" value="{{ $booking->idcustomeer }}">
+
                         </div>
 
                         <div class="mb-3">
                             <label>No HP Tamu</label>
-                            <input type="text" name="notelp_customer" id="noHpCustomer" class="form-control" required>
+                            <input type="text" name="notelp_customer" id="noHpCustomer" class="form-control" value="{{ $booking->customer->notelp_customer }}">
                         </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label">Cek In</label>
-                                    <input type="datetime-local" class="form-control" name="tglcekin" id="checkin" value="{{ date('Y-m-d\T14:00') }}" min="00:00" max="23:00" step="3600" required>
+                                    <input type="datetime-local" class="form-control" name="tglcekin" id="checkin" value="{{ \Carbon\Carbon::parse($booking->tglcekin)->format('Y-m-d\TH:i') }}" min="00:00" max="23:00" step="3600">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label">Cek Out</label>
-                                    <input type="datetime-local" class="form-control" name="tglcekout" id="checkout" value="{{ date('Y-m-d\T12:00', strtotime('+1 day')) }}" min="00:00" max="23:00" step="3600" required>
-
+                                    <input type="datetime-local" class="form-control" name="tglcekout" id="checkout" value="{{ \Carbon\Carbon::parse($booking->tglcekout)->format('Y-m-d\TH:i') }}" min="00:00" max="23:00" step="3600">
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label>Total Harga</label>
-                            <input type="text" name="total_harga" id="TotalHarga" class="form-control" required>
+                            <input type="text" name="total_harga" id="TotalHarga" class="form-control" value="Rp. {{ number_format($booking->total_harga, 0, '.', '.') }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Note</label>
-                            <textarea class="form-control" name="note" id="" required></textarea>
+                            <textarea class="form-control" name="note" id="">{{ $booking->note }}</textarea>
                         </div>
 
                         <button class="btn btn-ae" type="submit">Simpan</button>
@@ -163,6 +164,7 @@
                 },
                 minLength: 2,
                 select: function(event, ui) {
+                    // isi otomatis No HP
                     $("#noHpCustomer").val(ui.item.no_hp);
                     $("#idCustomerHidden").val(ui.item.id); // simpan id customer
                     $("#namaCustomerBaru").val(ui.item.value);
