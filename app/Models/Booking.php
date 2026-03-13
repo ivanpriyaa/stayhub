@@ -22,7 +22,9 @@ class Booking extends Model
         'tglcekin',
         'tglcekout',
         'pic',
-        'note'
+        'note',
+        'harga',
+        'total_harga'
     ];
 
     public function customer()
