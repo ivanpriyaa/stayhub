@@ -16,8 +16,9 @@
                         <h5>All Booking</h5>
                         <form action="/booking" method="GET">
                             <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Cari villa/Customer..." value="{{ request('search') }}">
-                                <button class="btn btn-ae" type="submit">
+                                <input type="date" name="tgl" class="form-control" placeholder="Cari villa/Customer..." value="{{ request('tgl') }}" style="margin-right: 10px; border-radius: 5px;">
+                                <input type="text" name="search" class="form-control" placeholder="Cari villa/Customer..." value="{{ request('search') }}" style="margin-right: 10px; border-radius: 5px;">
+                                <button class="btn btn-ae" type="submit" style="border-radius: 5px 0 0 5px;">
                                     Cari
                                 </button>
                                 <a href="/booking" class="btn btn-ae">Reset</a>
@@ -44,7 +45,11 @@
                                 @foreach ($booking as $b)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($b->tglbooking)->translatedFormat('d F Y') }}</td>
-                                        <td>{{ $b->pic }}</td>
+                                        <td>{{ $b->pic }}
+                                            @if ($b->pic == 'Agen')
+                                                - {{ $b->nama_agen }}
+                                            @endif
+                                        </td>
                                         <td>{{ $b->villa->nama_villa }}</td>
                                         <td>{{ $b->customer->nama_customer }}</td>
                                         <td>{{ \Carbon\Carbon::parse($b->tglcekin)->translatedFormat('d F Y H:i') }}</td>

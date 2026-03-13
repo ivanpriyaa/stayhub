@@ -14,7 +14,7 @@ class CustomerController extends Controller
         $customer = Customer::when($search, function ($query, $search) {
             return $query->where('nama_customer', 'like', "%$search%")
                 ->orWhere('notelp_customer', 'like', "%$search%");
-        })
+        })->orderBy('idcustomer', 'desc')
             ->paginate(10);
 
         return view('customer', compact('customer'));
@@ -74,6 +74,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->delete();
+
 
         return redirect('/customer');
     }

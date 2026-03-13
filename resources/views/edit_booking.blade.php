@@ -19,8 +19,29 @@
                             <label>Tanggal Booking</label>
                             <input type="date" name="tglbooking" class="form-control" value="{{ $booking->tglbooking }}">
                         </div>
-
                         <div class="mb-3">
+                            <label>Nama Villa</label>
+                            <select class="form-select" name="villa" aria-label="Pilih Brand" id="villaSelect" required>
+                                <option disabled selected>Pilih Villa</option>
+                                <option value="bromo" {{ in_array($booking->idvilla, ['VLL0001', 'VLL0002']) ? 'selected' : '' }}>Bromo</option>
+                                <option value="VLL0003" data-harga="600000" {{ $booking->idvilla == 'VLL0003' ? 'selected' : '' }}>Topaz</option>
+                                <option value="VLL0004" data-harga="700000" {{ $booking->idvilla == 'VLL0004' ? 'selected' : '' }}>Medan</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="bromoUnit" style="display:none;">
+                            <label>Pilih Unit Bromo</label><br>
+
+                            <input type="radio" name="idvilla" value="VLL0001" data-harga="500000" {{ $booking->idvilla == 'VLL0001' ? 'checked' : '' }}>
+                            Bromo 1
+
+                            <input type="radio" name="idvilla" value="VLL0002" data-harga="550000" {{ $booking->idvilla == 'VLL0002' ? 'checked' : '' }}>
+                            Bromo 2
+                        </div>
+
+                        <input type="hidden" name="idvilla" id="idvillaHidden">
+
+                        {{-- <div class="mb-3">
                             <label>Nama Villa</label>
                             <select class="form-select" name="idvilla" aria-label="Pilih Brand" id="villaSelect">
                                 <option disabled>Pilih Brand</option>
@@ -30,7 +51,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
 
                         <div class="mb-3">
                             <label>Harga</label>
@@ -65,6 +86,21 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="pic">PIC</label>
+                            <select name="pic" id="pic" class="form-control">
+                                <option value="" disabled selected>-- Pilih PIC --</option>
+                                <option value="Biru Jawi" {{ $booking->pic == 'Biru Jawi' ? 'selected' : '' }}>Biru Jawi</option>
+                                <option value="Bapak" {{ $booking->pic == 'Bapak' ? 'selected' : '' }}>Bapak</option>
+                                <option value="Agen" {{ $booking->pic == 'Agen' ? 'selected' : '' }}>Agen</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="formAgen" style="display:none;">
+                            <label for="nama_agen">Nama Agen</label>
+                            <input type="text" name="nama_agen" class="form-control" placeholder="Masukkan nama agen" value="{{ $booking->nama_agen }}">
+                        </div>
+
+                        <div class="mb-3">
                             <label>Total Harga</label>
                             <input type="text" name="total_harga" id="TotalHarga" class="form-control" value="Rp. {{ number_format($booking->total_harga, 0, '.', '.') }}">
                         </div>
@@ -90,15 +126,92 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
     <!-- Script autocomplete -->
+    <script>
+        function toggleAgen() {
+
+            let pic = document.getElementById("pic").value;
+            let formAgen = document.getElementById("formAgen");
+            let inputAgen = document.querySelector('input[name="nama_agen"]');
+
+            if (pic === "Agen") {
+                formAgen.style.display = "block";
+                inputAgen.disabled = false;
+            } else {
+                formAgen.style.display = "none";
+                inputAgen.value = ""; // hapus isi
+                inputAgen.disabled = true; // supaya tidak terkirim
+            }
+
+        }
+
+        document.getElementById("pic").addEventListener("change", toggleAgen);
+        document.addEventListener("DOMContentLoaded", toggleAgen);
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let villaSelect = document.getElementById("villaSelect");
+            let bromoUnit = document.getElementById("bromoUnit");
+
+            if (villaSelect.value === "bromo") {
+                bromoUnit.style.display = "block";
+            }
+
+        });
+
+        document.getElementById("villaSelect").addEventListener("change", function() {
+
+            let bromoUnit = document.getElementById("bromoUnit");
+            let hidden = document.getElementById("idvillaHidden");
+            let radioBromo = document.querySelectorAll('input[name="idvilla"]');
+
+
+            if (this.value === "bromo") {
+                bromoUnit.style.display = "block";
+                hidden.disabled = true; // supaya tidak ikut terkirim
+            } else {
+                bromoUnit.style.display = "none";
+                hidden.disabled = false;
+                hidden.value = this.value;
+
+                radioBromo.forEach(function(radio) {
+                    radio.checked = false;
+                });
+            }
+
+        });
+    </script>
     <script id="villaPriceScript">
         document.getElementById('villaSelect').addEventListener('change', function() {
 
             let selectedOption = this.options[this.selectedIndex];
             let harga = selectedOption.getAttribute('data-harga');
+            let bromoUnit = document.getElementById('bromoUnit');
 
-            document.getElementById('HargaVilla').value = harga;
+            if (this.value === "bromo") {
+                bromoUnit.style.display = "block";
+                document.getElementById('HargaVilla').value = "";
+            } else {
+                bromoUnit.style.display = "none";
+                document.getElementById('HargaVilla').value = harga;
+            }
+
+            // document.getElementById('HargaVilla').value = harga;
 
             hitungTotalHarga(); // langsung hitung total
+        });
+        document.querySelectorAll('input[name="idvilla"]').forEach(function(radio) {
+
+            radio.addEventListener('change', function() {
+
+                let harga = this.getAttribute('data-harga');
+
+                document.getElementById('HargaVilla').value = harga;
+
+                hitungTotalHarga();
+
+            });
+
         });
     </script>
     <script id="totalPriceScript">
@@ -112,7 +225,7 @@
 
         function hitungTotalHarga() {
 
-            let harga = parseFloat(document.getElementById('HargaVilla').value) || 0;
+            let harga = parseFloat(getAngka(document.getElementById('HargaVilla').value)) || 0;
             let checkin = document.getElementById('checkin').value;
             let checkout = document.getElementById('checkout').value;
 

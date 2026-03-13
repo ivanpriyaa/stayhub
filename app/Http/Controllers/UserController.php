@@ -15,7 +15,7 @@ class UserController extends Controller
         $user = User::when($search, function ($query, $search) {
             return $query->where('nama_user', 'like', "%$search%")
                 ->orWhere('username', 'like', "%$search%");
-        })
+        })->orderBy('iduser', 'desc')
             ->paginate(10);
 
         return view('user', compact('user'));
