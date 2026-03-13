@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('pic');
             $table->dateTime('tglcekin');
             $table->dateTime('tglcekout');
+            $table->string('note');
             $table->timestamps();
-            
-            $table  ->foreign('idvilla')-> references('idvilla')-> on('villa');
-            $table  ->foreign('idcustomer')-> references('idcustomer')-> on('customers');
 
+            $table->foreign('idvilla')->references('idvilla')->on('villa');
+            $table->foreign('idcustomer')->references('idcustomer')->on('customers');
         });
     }
 

@@ -20,4 +20,8 @@ class Villa extends Model
         'nama_villa',
         'alamat_villa'
     ];
+    public function booking()
+    {
+        return $this->hasMany(Booking::class, 'idvilla');
+    }
 }

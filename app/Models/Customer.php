@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,8 @@ class Customer extends Model
         'notelp_customer'
     ];
 
-    
+    public function booking()
+    {
+        return $this->hasMany(Booking::class, 'idcustomer');
+    }
 }
