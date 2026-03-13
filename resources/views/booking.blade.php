@@ -44,7 +44,11 @@
                                 @foreach ($booking as $b)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($b->tglbooking)->translatedFormat('d F Y') }}</td>
-                                        <td>{{ $b->pic }}</td>
+                                        <td>{{ $b->pic }}
+                                            @if ($b->pic == 'Agen')
+                                                - {{ $b->nama_agen }}
+                                            @endif
+                                        </td>
                                         <td>{{ $b->villa->nama_villa }}</td>
                                         <td>{{ $b->customer->nama_customer }}</td>
                                         <td>{{ \Carbon\Carbon::parse($b->tglcekin)->translatedFormat('d F Y H:i') }}</td>

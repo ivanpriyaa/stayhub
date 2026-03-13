@@ -70,7 +70,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $total_harga = preg_replace('/[^0-9]/', '', $request->total_harga);
-        // dd($request , $total_harga);
+        // dd($request, $total_harga);
         $request->validate([
             'tglbooking' => 'required|date',
             'idvilla' => 'required',
@@ -128,7 +128,8 @@ class BookingController extends Controller
             'tglcekout' => $request->tglcekout,
             'harga' => $request->harga,
             'total_harga' => $total_harga,
-            'pic' => "hmm", // sesuaikan jika ada field pic
+            'pic' => $request->pic,
+            'nama_agen' => $request->nama_agen,
             'note' => $request->note,
         ]);
 
@@ -156,6 +157,7 @@ class BookingController extends Controller
             'idcustomer' => 'nullable|string|max:255',
             'tglcekout' => 'required|after:tglcekin',
             'note' => 'nullable|string',
+            'nama_agen' => 'nullable'
         ]);
 
         // Cari booking yang akan diedit
@@ -195,6 +197,8 @@ class BookingController extends Controller
             'tglcekin' => $request->tglcekin,
             'tglcekout' => $request->tglcekout,
             'note' => $request->note,
+            'pic' => $request->pic,
+            'nama_agen' => $request->nama_agen
         ]);
 
         return redirect('/booking')->with('success', 'Booking berhasil diperbarui!');

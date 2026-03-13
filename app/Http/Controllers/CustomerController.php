@@ -74,6 +74,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->delete();
+        
 
         return redirect('/customer');
     }
