@@ -1,262 +1,398 @@
 .inria-serif-light {
-  font-family: "Inria Serif", serif;
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .inria-serif-regular {
-  font-family: "Inria Serif", serif;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Inria Serif", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .inria-serif-bold {
-  font-family: "Inria Serif", serif;
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Inria Serif", serif;
+    font-weight: 700;
+    font-style: normal;
 }
 
 .inria-serif-light-italic {
-  font-family: "Inria Serif", serif;
-  font-weight: 300;
-  font-style: italic;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: italic;
 }
 
 .inria-serif-regular-italic {
-  font-family: "Inria Serif", serif;
-  font-weight: 400;
-  font-style: italic;
+    font-family: "Inria Serif", serif;
+    font-weight: 400;
+    font-style: italic;
 }
 
 .inria-serif-bold-italic {
-  font-family: "Inria Serif", serif;
-  font-weight: 700;
-  font-style: italic;
+    font-family: "Inria Serif", serif;
+    font-weight: 700;
+    font-style: italic;
 }
 
 .itim-regular {
-  font-family: "Itim", cursive;
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Itim", cursive;
+    font-weight: 700;
+    font-style: normal;
 }
 
 .inria-sans-light {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .inria-sans-regular {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .inria-sans-bold {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
 }
 
 .inria-sans-light-italic {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 300;
-  font-style: italic;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 300;
+    font-style: italic;
 }
 
 .inria-sans-regular-italic {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 400;
-  font-style: italic;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 400;
+    font-style: italic;
 }
 
 .inria-sans-bold-italic {
-  font-family: "Inria Sans", sans-serif;
-  font-weight: 700;
-  font-style: italic;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 700;
+    font-style: italic;
 }
 
 .noto-rashi-hebrew-tulisan {
-  font-family: "Noto Rashi Hebrew", serif;
-  font-optical-sizing: auto;
-  font-weight: 800;
-  font-style: normal;
-  color: #D4A245;
+    font-family: "Noto Rashi Hebrew", serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    color: #d4a245;
 }
 
 .judul {
-  text-align: center;
+    text-align: center;
 }
 
 .tombole {
-  background-color: #D4A245;
-  color: white;
+    background-color: #d4a245;
+    color: white;
 }
 
 .tombole:hover {
-  box-shadow: 0 0 14px .25rem rgb(255 152 1 / 39%);
-  background-color: #ffaa30;
-  color: white;
+    box-shadow: 0 0 14px 0.25rem rgb(255 152 1 / 39%);
+    background-color: #ffaa30;
+    color: white;
 }
 
 /* CONTENT */
 
 body {
-  background-color: #EFEFEF;
+    background-color: #efefef;
 }
 
 /* Sidebar di desktop */
 .sidebar {
-  min-width: 300px;
-  height: 100vh;
-  background-color: #fff;
-  position: sticky;
-  top: 0;
+    min-width: 300px;
+    height: 100vh;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
 }
 
 .button .btn-menu {
-  display: none !important;
+    display: none !important;
 }
 
 .sidebar .logo {
-  margin-top: 10px;
-  color: #8A7650;
-  font-size: 40px;
+    margin-top: 10px;
+    color: #8a7650;
+    font-size: 40px;
 }
 
 .sidebar .tagline {
-  font-size: 10px;
-  margin-bottom: 10px;
+    font-size: 10px;
+    margin-bottom: 10px;
 }
 
 .nav-link {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: black;
-  font-size: 20px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: black;
+    font-size: 20px;
 }
 
 .nav-link:hover {
-  border-left: 3px solid #8A7650;
-  background-color: #EFEFEF;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: #8A7650;
+    border-left: 3px solid #8a7650;
+    background-color: #efefef;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #8a7650;
 }
 
 .nav-link.active {
-  border-left: 3px solid #8A7650;
-  background-color: #EFEFEF;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  color: #8A7650;
+    border-left: 3px solid #8a7650;
+    background-color: #efefef;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #8a7650;
 }
 
 /* Konten menyesuaikan lebar */
 .content {
-  flex: 1;
+    flex: 1;
 }
 
 .tombol-master {
-  background-color: #8A7650;
-  color: #fff;
+    background-color: #8a7650;
+    color: #fff;
 }
 
 .card {
-  border-color: #fff;
-  border-radius: 20px;
+    border-color: #fff;
+    border-radius: 20px;
 }
 
 .btn-ae {
-  background-color: #8A7650;
-  color: #fff;
+    background-color: #8a7650;
+    color: #fff;
 }
 
 .btn-ae:hover {
-  border-color: #8A7650;
-  color: #8A7650;
+    border-color: #8a7650;
+    color: #8a7650;
 }
 
-
-
 .pagination .page-link {
-  color: #8A7650;
+    color: #8a7650;
 }
 
 /* Ubah warna latar halaman aktif */
 .pagination .active .page-link {
-  background-color: #8A7650;
-  /* ungu */
-  color: #fff;
-  border: none;
+    background-color: #8a7650;
+    /* ungu */
+    color: #fff;
+    border: none;
 }
 
 /* Hover untuk halaman lain */
 .pagination .page-link:hover {
-  background-color: #fff8ec;
-  /* biru muda */
-  color: #8A7650;
+    background-color: #fff8ec;
+    /* biru muda */
+    color: #8a7650;
 }
 
 /* Ubah border dan radius */
 .pagination .page-item .page-link {
-  border-radius: 0.5rem;
-  border: 1px solid #ddd;
-  margin: 0 2px;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    margin: 0 2px;
 }
 
 /* Pagination container */
 .pagination {
-  justify-content: center;
-  /* center alignment */
-  margin-top: 20px;
+    justify-content: center;
+    /* center alignment */
+    margin-top: 20px;
 }
 
-
-
-/* Hanya untuk mobile */
-@media (max-width: 900px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
+.logine {
+    display: flex;
     height: 100vh;
-    width: 250px;
-    background-color: #f8f9fa;
-    overflow-y: auto;
-    z-index: 1050;
-    /* pastikan lebih tinggi dari konten */
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
+    margin: 0;
+    background-color: #fff;
+}
 
-  .sidebar.show {
-    transform: translateX(0);
-  }
-
-  .button .btn-menu {
-    display: block !important;
-  }
-
-  /* overlay */
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+.login-image img {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1040;
-    /* di bawah sidebar tapi di atas konten */
-    display: none;
-  }
+    object-fit: cover;
+}
+.formlogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-  .sidebar-overlay.show {
-    display: block;
-  }
+.kotake {
+    width: 60%;
+    background-color: white;
+    padding: 50px;
+    border-radius: 10px;
+}
 
-  .content {
-    flex-grow: 1;
+.login__field {
+    padding: 5px 10px;
+    position: relative;
+}
+
+.login__icon {
+    position: absolute;
+    top: 18px;
+    color: #d4a245;
+}
+
+.login__input {
+    border-radius: 10px;
+    border: 2px solid #d4a245;
+    background: none;
+    padding: 10px;
+    padding-left: 35px;
+    font-weight: 700;
     width: 100%;
-  }
+    transition: 0.2s;
+    outline: none;
+}
+
+.login__input::placeholder {
+    color: #3d3d3d;
+    font-weight: 400;
+}
+
+.login__input:focus {
+    border: 2px solid #d9aa4b;
+    outline: 0;
+    box-shadow: 0 0 6px 0.25rem rgb(205 135 34 / 39%);
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: #f8f9fa;
+        overflow-y: auto;
+        z-index: 1050;
+        /* pastikan lebih tinggi dari konten */
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .button .btn-menu {
+        display: block !important;
+    }
+
+    /* overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 1040;
+        /* di bawah sidebar tapi di atas konten */
+        display: none;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+    .content {
+        flex-grow: 1;
+        width: 100%;
+    }
+}
+
+@media (max-width: 896px) and (orientation: landscape) {
+    .logine {
+        display: flex;
+        height: 100vh;
+    }
+    .formlogin{
+        height: 100vh !important;
+    }
+    .judul{
+        margin-top: -25px !important;
+    }
+}
+
+@media (max-width: 884px) and (orientation: landscape) {
+    .logine {
+        display: flex;
+        height: 100vh;
+    }
+    .formlogin{
+        height: 100vh !important;
+    }
+    .kotake{
+        align-items: center;
+        margin-top: 1px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logine {
+        display: flex;
+    }
+    .kotake {
+        width: 90%;
+        z-index: 1;
+        margin-top: -50%;
+    }
+}
+
+@media (max-width: 740px) and (orientation: landscape) {
+    .logine {
+        display: flex;
+    }
+    .kotake {
+        width: 90%;
+        z-index: 1;
+        margin-top: -1%;
+    }
+}
+
+@media (max-width: 430px) {
+    .logine {
+        display: block;
+    }
+    .kotake {
+        width: 90%;
+        z-index: 1;
+        margin-top: -50%;
+    }
+}
+
+@media (max-width: 390px) {
+    .logine {
+        display: block;
+    }
+    .kotake {
+        width: 90%;
+        z-index: 1;
+        margin-top: -50%;
+    }
+}
+
+@media (max-width: 375px) {
+    .logine {
+        display: block;
+    }
+    .kotake {
+        width: 90%;
+        z-index: 1;
+        margin-top: -70%;
+    }
 }

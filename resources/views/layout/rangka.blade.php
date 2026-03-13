@@ -46,7 +46,7 @@
                 </li>
                 <hr>
                 <li class="nav-item mb-1">
-                    <a href="{{ url('/booking') }}" class="nav-link inria-sans-regular"><i class="bi bi-building-add"></i></span> Booking Villa</a>
+                    <a href="{{ url('/booking') }}" class="nav-link inria-sans-regular {{ request()->is('booking*') ? 'active' : '' }}"><i class="bi bi-building-add"></i></span> Booking Villa</a>
                 </li>
                 <hr>
                 <li class="nav-item mb-1">
