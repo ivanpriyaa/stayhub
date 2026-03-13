@@ -14,7 +14,7 @@ class VillaController extends Controller
         $villa = Villa::when($search, function ($query, $search) {
             return $query->where('nama_villa', 'like', "%$search%")
                 ->orWhere('alamat_villa', 'like', "%$search%");
-        })
+        })->orderBy('idvilla', 'desc')
             ->paginate(10);
 
         return view('villa', compact('villa'));

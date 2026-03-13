@@ -12,6 +12,8 @@ class BookingController extends Controller
     public function booking(Request $request)
     {
         $query = Booking::with(['villa', 'customer']);
+        $tanggal = $request->tgl;
+
 
         if ($request->input('search')) {
             $search = $request->input('search');
@@ -33,7 +35,11 @@ class BookingController extends Controller
             });
         }
 
-        $booking = $query->paginate(50);
+        if (!empty($tanggal)) {
+            $query->whereDate('tglbooking', '=', $tanggal);
+        }
+
+        $booking = $query->orderBy('tglbooking', 'desc')->paginate(50);
 
         return view('booking', compact('booking'));
     }
@@ -150,7 +156,7 @@ class BookingController extends Controller
 
         $request->validate([
             'tglbooking' => 'required|date',
-            'idvilla' => 'required',
+            'idvilla' => 'nullable',
             'nama_customer' => 'required|string|max:255',
             'notelp_customer' => 'required|string|max:20',
             'tglcekin' => 'required',
@@ -188,9 +194,8 @@ class BookingController extends Controller
             ]);
         }
         // Update booking
-        $booking->update([
+        $data = [
             'tglbooking' => $request->tglbooking,
-            'idvilla' => $request->idvilla,
             'idcustomer' => $customer->idcustomer,
             'harga' => $request->harga,
             'total_harga' => $total_harga,
@@ -199,7 +204,13 @@ class BookingController extends Controller
             'note' => $request->note,
             'pic' => $request->pic,
             'nama_agen' => $request->nama_agen
-        ]);
+        ];
+
+        if ($request->idvilla) {
+            $data['idvilla'] = $request->idvilla;
+        }
+
+        $booking->update($data);
 
         return redirect('/booking')->with('success', 'Booking berhasil diperbarui!');
     }
