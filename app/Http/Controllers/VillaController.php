@@ -74,4 +74,9 @@ class VillaController extends Controller
 
         return redirect('/villa');
     }
+
+    public function ambil_data(){
+        $villa = Villa::all();
+        return view('booking.create', compact('villa'));
+    }
 }
