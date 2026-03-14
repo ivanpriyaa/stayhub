@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Villa;
 use Illuminate\Http\Request;
 
@@ -73,5 +74,22 @@ class VillaController extends Controller
         $villa->delete();
 
         return redirect('/villa');
+    }
+
+    public function available()
+    {
+        $booking = Booking::with(['villa', 'customer'])->get();
+
+        $events = [];
+
+        foreach ($booking as $b) {
+            $events[] = [
+                'title' => $b->villa->nama_villa . ' - ' . $b->customer->nama_customer,
+                'start' => $b->tglcekin,
+                'end'   => $b->tglcekout,
+            ];
+        }
+
+        return view('villa_available', compact('events', 'booking'));
     }
 }

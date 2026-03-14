@@ -26,7 +26,7 @@
                         <i class="bi bi-house-door"></i> Home
                     </a>
                 </li>
-
+                <hr>
                 <li class="nav-item mb-1">
                     <a href="{{ url('/customer') }}" class="nav-link inria-sans-regular {{ request()->is('customer*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i> Customer
@@ -45,6 +45,9 @@
                     </a>
                 </li>
                 <hr>
+                <li class="nav-item mb-1">
+                    <a href="{{ url('/availability') }}" class="nav-link inria-sans-regular {{ request()->is('availability*') ? 'active' : '' }}"><i class="bi bi-calendar-week"></i></span> Villa Availability</a>
+                </li>
                 <li class="nav-item mb-1">
                     <a href="{{ url('/booking') }}" class="nav-link inria-sans-regular {{ request()->is('booking*') ? 'active' : '' }}"><i class="bi bi-building-add"></i></span> Booking Villa</a>
                 </li>

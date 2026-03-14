@@ -54,3 +54,6 @@ Route::get('/customers/search', [BookingController::class, 'search'])->name('cus
 Route::get('/booking/edit_booking/{id}', [BookingController::class, 'edit_booking'])->middleware('auth')->name('editbook');
 Route::post('/booking/update_booking/{id}', [BookingController::class, 'update_booking']);
 Route::get('/booking/delete_booking/{id}', [BookingController::class, 'destroy_booking']);
+
+//cek villa
+Route::get('/availability', [VillaController::class, 'available'])->middleware('auth')->name('available');
