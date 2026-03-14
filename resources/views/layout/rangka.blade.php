@@ -66,12 +66,14 @@
         <!-- Konten -->
         <div class="content flex-grow-1 p-3 button">
             <!-- Tombol sidebar mobile -->
-            <button class="btn btn-menu mb-3 " id="toggleSidebar" style="background-color: #8A7650;color: #fff;">☰ Menu</button>
+            <button class="btn btn-menu mb-3 " id="toggleSidebar" style="background-color: #8A7650;color: #fff;">☰
+                Menu</button>
 
             @yield('content')
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <!-- Bootstrap JS -->

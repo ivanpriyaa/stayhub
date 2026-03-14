@@ -92,4 +92,9 @@ class VillaController extends Controller
 
         return view('villa_available', compact('events', 'booking'));
     }
+    public function ambil_data()
+    {
+        $villa = Villa::all();
+        return view('booking.create', compact('villa'));
+    }
 }

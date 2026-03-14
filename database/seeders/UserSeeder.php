@@ -32,6 +32,6 @@ class UserSeeder extends Seeder
                 'updated_at' => Carbon::now()
             ]);
         }
-        User::factory()->count(100)->create();
+        User::factory()->count(1)->create();
     }
 }

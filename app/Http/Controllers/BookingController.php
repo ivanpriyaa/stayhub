@@ -44,12 +44,15 @@ class BookingController extends Controller
         return view('booking', compact('booking'));
     }
 
-    public function tambah_booking()
+    public function tambah_booking(Request $request)
     {
         $customer = Customer::orderBy('idcustomer', 'asc')->get();
         $villa = Villa::orderBy('idvilla', 'asc')->get();
 
-        return view('tambah_booking', compact('customer', 'villa'));
+        $tanggal = $request->tanggal;
+
+        return view('tambah_booking', compact('customer', 'villa', 'tanggal'));
+        // return view('tambah_booking', compact('customer', 'villa'));
     }
 
     public function search(Request $request)
@@ -136,10 +139,14 @@ class BookingController extends Controller
             'total_harga' => $total_harga,
             'pic' => $request->pic,
             'nama_agen' => $request->nama_agen,
-            'note' => $request->note,
+            'note' => $request->note ?? '',
         ]);
 
-        return redirect('/booking')->with('success', 'Booking berhasil disimpan!');
+        if ($request->from == 'calendar') {
+            return redirect('/dashboard')->with('success', 'Booking berhasil disimpan!');
+        } else {
+            return redirect('/booking')->with('success', 'Booking berhasil disimpan!');
+        }
     }
     public function edit_booking($id)
     {
@@ -201,7 +208,7 @@ class BookingController extends Controller
             'total_harga' => $total_harga,
             'tglcekin' => $request->tglcekin,
             'tglcekout' => $request->tglcekout,
-            'note' => $request->note,
+            'note' => $request->note ?? '',
             'pic' => $request->pic,
             'nama_agen' => $request->nama_agen
         ];
