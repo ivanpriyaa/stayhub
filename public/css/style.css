@@ -89,9 +89,29 @@
     height: fit-content;
 }
 
+.event-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
 .jdl-cekv {
     color: #b99859;
     font-weight: bolder;
+    margin-bottom: 0;
+
+}
+
+.sub-cekv {
+    color: gray;
+    margin-bottom: 0;
+}
+
+.sewaa {
+    margin-bottom: 0;
+    font-weight: 600;
 }
 
 .judul {
@@ -298,6 +318,15 @@ body {
     font-weight: 600;
 }
 
+.fc-day-sun .fc-daygrid-day-number {
+    color: red !important;
+    font-weight: 800;
+}
+
+.fc-bg-event {
+    background: #ffe6e6 !important;
+}
+
 .fc-daygrid-day:hover {
     background-color: #f5f5f5;
 }
@@ -385,6 +414,38 @@ body {
         flex-grow: 1;
         width: 100%;
     }
+
+    .img-cekv {
+        width: 80px;
+    }
+
+    .event-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: round;
+        display: inline-block;
+
+    }
+
+    .jdl-cekv {
+        color: #b99859;
+        font-weight: bolder;
+        margin-bottom: 0;
+        font-size: 22px;
+
+    }
+
+    .sub-cekv {
+        color: gray;
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+
+    .sewaa {
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+
 }
 
 @media (max-width: 896px) and (orientation: landscape) {
