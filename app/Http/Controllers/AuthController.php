@@ -34,6 +34,15 @@ class AuthController extends Controller
     {
         $booking = Booking::count();
 
-        return view('dashboard', compact('booking'));
+        $events = Booking::with('villa')->get()->map(function ($b) {
+            return [
+                'title' => optional($b->villa)->nama_villa ?? 'Villa',
+                'start' => $b->tglcekin,
+                'end' => $b->tglcekout,
+                'color' => '#8A7650'
+            ];
+        });
+
+        return view('dashboard', compact('booking','events'));
     }
 }

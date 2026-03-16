@@ -15,9 +15,10 @@
 
                 <form method="POST" action="/booking/store">
                     @csrf
+                    <input type="text" name="from" value="{{ request('from') }}" hidden>
                     <div class="mb-3">
                         <label>Tanggal Booking</label>
-                        <input type="date" name="tglbooking" class="form-control" required>
+                        <input type="date" name="tglbooking" class="form-control" value="{{ $tanggal ?? '' }}" required>
                     </div>
 
                     <div class="mb-3">
@@ -72,13 +73,13 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label class="form-label">Cek In</label>
-                                <input type="datetime-local" class="form-control" name="tglcekin" id="checkin" value="{{ date('Y-m-d\T14:00') }}" min="00:00" max="23:00" step="3600" required>
+                                <input type="datetime-local" class="form-control" name="tglcekin" id="checkin" value="{{ $tanggal ? $tanggal.'T14:00' : date('Y-m-d\T14:00') }}" min="00:00" max="23:00" step="3600" required>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
                                 <label class="form-label">Cek Out</label>
-                                <input type="datetime-local" class="form-control" name="tglcekout" id="checkout" value="{{ date('Y-m-d\T12:00', strtotime('+1 day')) }}" min="00:00" max="23:00" step="3600" required>
+                                <input type="datetime-local" class="form-control" name="tglcekout" id="checkout" value="{{ $tanggal ? date('Y-m-d\T12:00', strtotime($tanggal.' +1 day')) : date('Y-m-d\T12:00', strtotime('+1 day')) }}" min="00:00" max="23:00" step="3600" required>
 
                             </div>
                         </div>
@@ -106,7 +107,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Note</label>
-                        <textarea class="form-control" name="note" id="" required></textarea>
+                        <textarea class="form-control" name="note" id=""></textarea>
                     </div>
 
                     <button class="btn btn-ae" type="submit">Simpan</button>
