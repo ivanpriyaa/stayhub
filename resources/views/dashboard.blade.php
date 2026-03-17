@@ -203,17 +203,17 @@
                     let villa = info.event.title.toLowerCase();
 
                     if (villa.includes('bromo 1')) {
-                        info.el.style.backgroundColor = '#0f8300'; // biru
+                        info.el.style.backgroundColor = '#0f8300'; // hijau tua
                         info.el.style.borderColor = '#0f8300';
                     }
 
                     if (villa.includes('bromo 2')) {
-                        info.el.style.backgroundColor = '#4CAF50'; // hijau
+                        info.el.style.backgroundColor = '#4CAF50'; // hijau muda
                         info.el.style.borderColor = '#4CAF50';
                     }
 
                     if (villa.includes('topaz')) {
-                        info.el.style.backgroundColor = '#2196F3'; // orange
+                        info.el.style.backgroundColor = '#2196F3'; // biru
                         info.el.style.borderColor = '#2196F3';
                     }
 

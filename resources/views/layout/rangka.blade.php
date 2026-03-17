@@ -44,6 +44,11 @@
                         <i class="bi bi-person"></i> Users
                     </a>
                 </li>
+                <li class="nav-item mb-1">
+                    <a href="{{ url('/PIC') }}" class="nav-link inria-sans-regular {{ request()->is('PIC*') ? 'active' : '' }}">
+                        <i class="bi bi-person"></i> PIC
+                    </a>
+                </li>
                 <hr>
                 <li class="nav-item mb-1">
                     <a href="{{ url('/availability') }}" class="nav-link inria-sans-regular {{ request()->is('availability*') ? 'active' : '' }}"><i class="bi bi-calendar-week"></i></span> Villa Availability</a>

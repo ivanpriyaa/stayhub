@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PicController;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -57,3 +58,10 @@ Route::get('/booking/delete_booking/{id}', [BookingController::class, 'destroy_b
 
 //cek villa
 Route::get('/availability', [VillaController::class, 'available']);
+
+Route::get('/PIC', [PicController::class, 'index'])->middleware('auth');
+Route::get('/PIC/tambah_pic', [PicController::class, 'tambah_pic'])->middleware('auth');
+Route::post('/PIC/store', [PicController::class, 'store']);
+Route::get('/PIC/edit_pic/{id}', [PicController::class, 'edit_pic'])->middleware('auth')->name('pic');
+Route::post('/PIC/update_pic/{id}', [PicController::class, 'update_pic']);
+Route::get('/PIC/delete_pic/{id}', [PicController::class, 'destroy_pic']);

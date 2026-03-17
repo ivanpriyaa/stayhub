@@ -90,7 +90,9 @@ class VillaController extends Controller
             ];
         }
 
-        return view('villa_available', compact('events', 'booking'));
+        $villa = Villa::all();
+
+        return view('villa_available', compact('events', 'booking', 'villa'));
     }
     public function ambil_data()
     {

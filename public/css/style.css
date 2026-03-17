@@ -97,6 +97,7 @@
 }
 
 
+
 .jdl-cekv {
     color: #b99859;
     font-weight: bolder;
@@ -105,7 +106,8 @@
 }
 
 .sub-cekv {
-    color: gray;
+    color: #a3a3a3;
+    line-height: 1;
     margin-bottom: 0;
 }
 
@@ -379,9 +381,13 @@ body {
     color: red !important;
 }
 
-.holiday .fc-daygrid-day-number{
-    color:red;
-    font-weight:bold;
+.holiday .fc-daygrid-day-number {
+    color: red;
+    font-weight: bold;
+}
+
+.holiday-event {
+    font-size: 14px !important;
 }
 
 @media (max-width: 900px) {
@@ -458,7 +464,19 @@ body {
     .sewaa {
         margin-bottom: 0;
         font-weight: 600;
+        font-size: 14px;
     }
+
+    .icon-cekv {
+        font-size: 14px;
+    }
+
+    .holiday-event .fc-event-title,
+    .holiday-event .fc-event-main {
+        display: none !important;
+    }
+
+
 
 }
 
@@ -494,6 +512,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    .holiday-event {
+        font-size: 0 !important;
+    }
+
     .logine {
         display: flex;
     }
