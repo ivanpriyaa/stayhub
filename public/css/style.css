@@ -379,6 +379,11 @@ body {
     color: red !important;
 }
 
+.holiday .fc-daygrid-day-number{
+    color:red;
+    font-weight:bold;
+}
+
 @media (max-width: 900px) {
     .sidebar {
         position: fixed;

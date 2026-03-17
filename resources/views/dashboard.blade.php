@@ -72,11 +72,83 @@
         </div>
     </div>
     <script>
-        
         let calendar;
+        let holidays = [];
+
+        function loadHolidays(year) {
+
+            fetch('https://libur.deno.dev/api?year=' + year)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.length > 0) {
+
+                        // holidays = data.map(item => {
+
+                        //     let d = new Date(item.date);
+
+                        //     let year = d.getFullYear();
+                        //     let month = String(d.getMonth() + 1).padStart(2, '0');
+                        //     let day = String(d.getDate()).padStart(2, '0');
+
+                        //     return year + "-" + month + "-" + day;
+
+                        // });
+                        holidays = data.map(item => item.date);
+                        calendar.render();
+
+                    } else {
+
+                        loadICS(year);
+
+                    }
+
+                })
+                .catch(() => {
+
+                    loadICS(year);
+
+                });
+
+        }
+
+        function loadICS(year) {
+
+            fetch('/holidays/tglindonesia.ics')
+                .then(res => res.text())
+                .then(data => {
+
+                    let lines = data.split("\n");
+                    holidays = [];
+
+                    lines.forEach(line => {
+
+                        if (line.startsWith("DTSTART")) {
+
+                            let date = line.split(":")[1].trim();
+
+                            let y = date.substring(0, 4);
+                            let m = date.substring(4, 6);
+                            let d = date.substring(6, 8);
+
+                            if (y == year) {
+                                holidays.push(y + "-" + m + "-" + d);
+                            }
+
+                        }
+
+                    });
+
+                    calendar.render();
+
+                });
+
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             let events = @json($events ?? []);
+
+            // loadHolidays(new Date().getFullYear());
 
             let calendarEl = document.getElementById('calendar');
 
@@ -85,7 +157,9 @@
                 height: 650,
                 headerToolbar: false,
                 locale: 'id',
-                dayHeaderFormat: { weekday: 'long' },
+                dayHeaderFormat: {
+                    weekday: 'long'
+                },
 
                 events: events,
 
@@ -142,11 +216,27 @@
                         info.el.style.backgroundColor = '#2196F3'; // orange
                         info.el.style.borderColor = '#2196F3';
                     }
-                    
+
                     if (villa.includes('medan')) {
                         info.el.style.backgroundColor = '#FF9800'; // orange
                         info.el.style.borderColor = '#FF9800';
                     }
+                },
+
+                dayCellClassNames: function(info) {
+
+                    let classes = [];
+                    // let dateStr = info.date.toISOString().split('T')[0];
+                    let dateStr = info.date.getFullYear() + '-' +
+                        String(info.date.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(info.date.getDate()).padStart(2, '0');
+
+                    if (holidays.includes(dateStr)) {
+                        classes.push('holiday');
+                    }
+
+                    return classes;
+
                 },
 
                 dayCellDidMount: function(info) {
@@ -154,6 +244,18 @@
                     let today = new Date();
                     today.setHours(0, 0, 0, 0);
 
+                    let dateStr = info.date.toISOString().split('T')[0];
+
+                    // tanggal merah
+                    if (holidays.includes(dateStr)) {
+                        let number = info.el.querySelector('.fc-daygrid-day-number');
+                        if (number) {
+                            number.style.color = "red";
+                            number.style.fontWeight = "bold";
+                        }
+                    }
+
+                    // tanggal sebelum hari ini
                     if (info.date < today) {
                         info.el.style.backgroundColor = "#f5f5f5";
                         info.el.style.color = "#999";
@@ -182,6 +284,8 @@
             });
 
             calendar.render();
+            let yearNow = new Date().getFullYear();
+            loadHolidays(yearNow);
 
             let today = new Date();
             let month = today.getMonth();
@@ -205,6 +309,8 @@
             let date = new Date(year, month, 1);
 
             calendar.gotoDate(date);
+
+            loadHolidays(year);
         }
     </script>
 @endsection
