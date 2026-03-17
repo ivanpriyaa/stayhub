@@ -56,4 +56,4 @@ Route::post('/booking/update_booking/{id}', [BookingController::class, 'update_b
 Route::get('/booking/delete_booking/{id}', [BookingController::class, 'destroy_booking']);
 
 //cek villa
-Route::get('/availability', [VillaController::class, 'available'])->middleware('auth')->name('available');
+Route::get('/availability', [VillaController::class, 'available']);
