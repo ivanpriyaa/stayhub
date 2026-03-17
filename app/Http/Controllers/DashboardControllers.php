@@ -20,6 +20,20 @@ class DashboardControllers extends Controller
             ];
         });
 
-        return view('dashboard', compact('booking','events'));
+        $chart = Booking::selectRaw('MONTH(tglbooking) as bulan, COUNT(*) as total')
+            ->whereYear('tglbooking', date('Y'))
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
+
+        $labels = [];
+        $totals = [];
+
+        foreach ($chart as $c) {
+            $labels[] = date("M", mktime(0, 0, 0, $c->bulan, 1)); // Jan, Feb, dll
+            $totals[] = $c->total;
+        }
+
+        return view('dashboard', compact('booking', 'events'));
     }
 }

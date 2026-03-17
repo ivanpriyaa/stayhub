@@ -127,25 +127,42 @@ class BookingController extends Controller
             $code = 'BOK' . str_pad($no, 4, "0", STR_PAD_LEFT);
         }
 
-        // Simpan booking
-        Booking::create([
-            'idbooking' => $code,
-            'tglbooking' => $request->tglbooking,
-            'idvilla' => $request->idvilla,
-            'idcustomer' => $customer->idcustomer,
-            'tglcekin' => $request->tglcekin,
-            'tglcekout' => $request->tglcekout,
-            'harga' => $request->harga,
-            'total_harga' => $total_harga,
-            'pic' => $request->pic,
-            'nama_agen' => $request->nama_agen,
-            'note' => $request->note ?? '',
-        ]);
+        // Cek bentrok booking (villa + tanggal overlap)
+        $cekBentrok = Booking::where('idvilla', $request->idvilla)
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('tglcekin', [$request->tglcekin, $request->tglcekout])
+                    ->orWhereBetween('tglcekout', [$request->tglcekin, $request->tglcekout])
+                    ->orWhere(function ($q) use ($request) {
+                        $q->where('tglcekin', '<=', $request->tglcekin)
+                            ->where('tglcekout', '>=', $request->tglcekout);
+                    });
+            })
+            ->exists();
 
-        if ($request->from == 'calendar') {
-            return redirect('/dashboard')->with('success', 'Booking berhasil disimpan!');
+        if ($cekBentrok) {
+            return back()->with('error', 'Villa terisi pada tanggal dan jam tersebut!');
         } else {
-            return redirect('/booking')->with('success', 'Booking berhasil disimpan!');
+
+            // Simpan booking
+            Booking::create([
+                'idbooking' => $code,
+                'tglbooking' => $request->tglbooking,
+                'idvilla' => $request->idvilla,
+                'idcustomer' => $customer->idcustomer,
+                'tglcekin' => $request->tglcekin,
+                'tglcekout' => $request->tglcekout,
+                'harga' => $request->harga,
+                'total_harga' => $total_harga,
+                'pic' => $request->pic,
+                'nama_agen' => $request->nama_agen,
+                'note' => $request->note ?? '',
+            ]);
+
+            if ($request->from == 'calendar') {
+                return redirect('/dashboard')->with('success', 'Booking berhasil disimpan!');
+            } else {
+                return redirect('/booking')->with('success', 'Booking berhasil disimpan!');
+            }
         }
     }
     public function edit_booking($id)

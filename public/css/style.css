@@ -371,8 +371,8 @@ body {
 }
 
 .fc-daygrid-event {
-    margin-bottom: 4px;
-    padding: 5px;
+    margin-bottom: 5px;
+    padding: 8px;
 }
 
 .fc-daygrid-day.fc-day-sun .fc-daygrid-day-number {
