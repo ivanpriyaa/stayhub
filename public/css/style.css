@@ -305,6 +305,18 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    gap:10px;
+}
+
+.calendar-left{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+#calendarTitle{
+    margin:0;
+    font-weight:600;
 }
 
 .fc {

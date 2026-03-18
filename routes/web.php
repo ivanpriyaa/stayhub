@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardControllers;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // })->middleware('auth')->name('dashboard');
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [DashboardControllers::class, 'dashboard'])->middleware('auth')->name('dashboard');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

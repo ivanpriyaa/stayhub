@@ -9,27 +9,78 @@
         <div class="col-md-4 mb-2">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title inria-sans-bold" style="display: flex;justify-content: space-between;">Total
-                        Booking<span style="color: #8A7650;"><i class="bi bi-cash-stack"></i></span></h5>
-                    <p class="card-text" style="font-size: 30px;font-weight: 700;">{{ $booking }}</p>
+
+                    <h5 class="card-title inria-sans-bold d-flex justify-content-between">
+                        Total Booking
+                        <span style="color:#8A7650;">
+                            <i class="bi bi-building-up"></i>
+                        </span>
+                    </h5>
+
+                    <div class="d-flex justify-content-between align-items-end">
+
+                        <div style="font-size:30px;font-weight:700;">
+                            {{ $booking }}
+                        </div>
+
+                        <div style="width:110px;height:35px;">
+                            <canvas id="bookingChart"></canvas>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-2">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title inria-sans-bold" style="display: flex;justify-content: space-between;">Card
-                        title<span style="color: #8A7650;"><i class="bi bi-cash-stack"></i></span></h5>
-                    <p class="card-text" style="font-size: 30px;font-weight: 700;">Rp 1jt</p>
+
+                    <h5 class="card-title inria-sans-bold d-flex justify-content-between">
+                        Total Revenue
+                        <span style="color:#8A7650;">
+                            <i class="bi bi-cash-stack"></i>
+                        </span>
+                    </h5>
+
+                    <div class="d-flex justify-content-between align-items-end">
+
+                        <div style="font-size:30px;font-weight:700;">
+                            Rp {{ format_uang($weeklyRevenue) }}
+                        </div>
+
+                        <div style="width:110px;height:35px;">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-2">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title inria-sans-bold" style="display: flex;justify-content: space-between;">Card
-                        title<span style="color: #8A7650;"><i class="bi bi-cash-stack"></i></span></h5>
-                    <p class="card-text" style="font-size: 30px;font-weight: 700;">Rp 1jt</p>
+
+                    <h5 class="card-title inria-sans-bold d-flex justify-content-between">
+                        Occupancy Rate
+                        <span style="color:#8A7650;">
+                            <i class="bi bi-percent"></i>
+                        </span>
+                    </h5>
+
+                    <div class="d-flex justify-content-between align-items-end">
+
+                        <div style="font-size:30px;font-weight:700;">
+                            {{ $occupancyRate }}%
+                        </div>
+
+                        <div style="width:110px;height:35px;">
+                            <canvas id="occupancyChart"></canvas>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -41,7 +92,7 @@
                     <div class="calendar-header">
 
                         <div class="calendar-left d-flex gap-2">
-                            <select id="monthSelect" class="form-select" style="width:160px;">
+                            <select id="monthSelect" class="form-select" style="width:45%;">
                                 <option value="0">Januari</option>
                                 <option value="1">Februari</option>
                                 <option value="2">Maret</option>
@@ -56,17 +107,49 @@
                                 <option value="11">Desember</option>
                             </select>
 
-                            <select id="yearSelect" class="form-select" style="width:120px;">
+                            <select id="yearSelect" class="form-select" style="width:52%;">
                                 @for ($i = 2020; $i <= 2035; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>
+
+                            {{-- @if (isset($villae)) --}}
+                            <select id="villaFilter" class="form-select">
+                                <option value="all">Semua Villa</option>
+
+                                @foreach ($villae as $villa)
+                                    <option value="{{ strtolower($villa->nama_villa) }}">
+                                        {{ $villa->nama_villa }}
+                                    </option>
+                                @endforeach
+
+                            </select>
+                            {{-- @endif --}}
                         </div>
 
                         <h3 id="calendarTitle"></h3>
 
                     </div>
                     <div id="calendar"></div>
+                    <div class="modal fade" id="eventModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detail Booking</h5>
+                                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p><b>Villa :</b> <span id="modalVilla"></span></p>
+                                    <p><b>Checkin :</b> <span id="modalStart"></span></p>
+                                    <p><b>Checkout :</b> <span id="modalEnd"></span></p>
+                                    <p><b>PIC :</b> <span id="modalPic"></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,22 +229,30 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            let events = @json($events ?? []);
+            let allEvents = @json($events ?? []);
 
             // loadHolidays(new Date().getFullYear());
 
             let calendarEl = document.getElementById('calendar');
+            let isMobile = window.innerWidth < 768;
 
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 height: 650,
                 headerToolbar: false,
                 locale: 'id',
-                dayHeaderFormat: {
-                    weekday: 'long'
-                },
+                // dayHeaderFormat: {
+                //     weekday: 'long'
+                // },
+                dayHeaderFormat: isMobile ? {
+                        weekday: 'short'
+                    } // Sen, Sel, Rab
+                    :
+                    {
+                        weekday: 'long'
+                    }, // Senin, Selasa, Rabu
 
-                events: events,
+                events: allEvents,
 
                 eventTimeFormat: {
                     hour: '2-digit',
@@ -172,6 +263,8 @@
                 eventContent: function(arg) {
                     let title = arg.event.title;
                     let time = arg.timeText;
+                    let pic = arg.event.extendedProps.pic || '-';
+
 
                     let start = arg.event.start;
                     let end = arg.event.end;
@@ -191,6 +284,29 @@
                             hour: '2-digit',
                             minute: '2-digit'
                         });
+                    }
+
+                    if (window.innerWidth < 768) {
+                        // ✅ MOBILE (lebih ringkas)
+                        return {
+                            html: `
+                                <div style="font-size:10px; line-height:1.2">
+                                    <div style="font-weight:600;">${title}</div>
+                                    <div>${startTime}-${endTime}</div>
+                                    <div style="color:#555;">PIC: ${pic}</div>
+                                </div>
+                            `
+                        };
+                    } else {
+                        // ✅ DESKTOP (full)
+                        return {
+                            html: `
+                                <div>
+                                    ${title} | ${startTime} - ${endTime} <br>
+                                    <small>PIC: ${pic}</small>
+                                </div>
+                            `
+                        };
                     }
 
                     return {
@@ -221,6 +337,24 @@
                         info.el.style.backgroundColor = '#FF9800'; // orange
                         info.el.style.borderColor = '#FF9800';
                     }
+                },
+
+                eventClick: function(info) {
+
+                    document.getElementById("modalVilla").innerText = info.event.title;
+
+                    document.getElementById("modalStart").innerText =
+                        info.event.start.toLocaleString();
+
+                    document.getElementById("modalEnd").innerText =
+                        info.event.end ? info.event.end.toLocaleString() : "-";
+
+                    document.getElementById("modalPic").innerText =
+                        info.event.extendedProps.pic || "-";
+
+                    let modal = new bootstrap.Modal(document.getElementById('eventModal'));
+                    modal.show();
+
                 },
 
                 dayCellClassNames: function(info) {
@@ -283,7 +417,27 @@
                 }
             });
 
+
+
             calendar.render();
+
+            document.getElementById("villaFilter").addEventListener("change", function() {
+
+                let villa = this.value;
+
+                let filtered = allEvents.filter(event => {
+
+                    if (villa === "all") return true;
+
+                    return event.villa && event.villa.toLowerCase() === villa;
+
+                });
+
+                calendar.removeAllEvents();
+                calendar.addEventSource(filtered);
+
+            });
+
             let yearNow = new Date().getFullYear();
             loadHolidays(yearNow);
 
@@ -312,5 +466,152 @@
 
             loadHolidays(year);
         }
+    </script>
+
+    {{-- ====================
+    Grafik Total Booking
+    ==================== --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const ctx = document.getElementById('bookingChart');
+
+            const labels = @json($labels);
+            const data = @json($data);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: '#8A7650',
+                        backgroundColor: 'rgba(138,118,80,0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+
+    {{-- ====================
+    Grafik Total Revenue
+    ==================== --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const ctx = document.getElementById('revenueChart');
+
+            const labels = @json($labels);
+            const revenue = @json($revenueData);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: revenue,
+                        borderColor: '#8A7650',
+                        backgroundColor: 'rgba(138,118,80,0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+
+    {{-- ====================
+    Grafik Occupancy Rate
+    ==================== --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const ctx = document.getElementById('occupancyChart');
+
+            const labels = @json($labels);
+            const occupancy = @json($occupancyData);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: occupancy,
+                        borderColor: '#8A7650',
+                        backgroundColor: 'rgba(138,118,80,0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+        });
     </script>
 @endsection

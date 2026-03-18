@@ -111,7 +111,11 @@
                     </div>
 
                     <button class="btn btn-ae" type="submit">Simpan</button>
+                    @if(request ('from'))
+                    <a href="/dashboard" class="btn btn-secondary">Kembali</a>
+                    @else
                     <a href="/booking" class="btn btn-secondary">Kembali</a>
+                    @endif
 
                 </form>
             </div>
