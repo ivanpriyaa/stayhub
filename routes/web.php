@@ -4,13 +4,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardControllers;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    return view('login');
+    return view('landingpage-home');
 });
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -46,7 +47,7 @@ Route::get('/villa/tambah_villa', [VillaController::class, 'tambah_villa'])->mid
 Route::get('/villa/edit_villa/{id}', [villaController::class, 'edit_villa'])->middleware('auth')->name('villa');
 Route::post('/villa/update_villa/{id}', [villaController::class, 'update_villa']);
 Route::post('/villa/store', [VillaController::class, 'store']);
-Route::get('/villa/delete_villa/{id}', [VillaController::class, 'destroy_villa']);
+Route::delete('/villa/{id}', [VillaController::class, 'destroy_villa'])->name('villa.destroy');
 
 // Booking
 Route::get('/booking', [BookingController::class, 'booking'])->middleware('auth')->name('booking');
@@ -59,3 +60,10 @@ Route::get('/booking/delete_booking/{id}', [BookingController::class, 'destroy_b
 
 //cek villa
 Route::get('/availability', [VillaController::class, 'available']);
+
+//landingpage
+Route::get('/landingpage-katalogvilla', [LandingPageController::class, 'katalogall']);
+
+Route::post('/booking/cancel/{id}', [BookingController::class, 'cancel']);
+Route::post('/booking/checkin/{id}', [BookingController::class, 'checkin']);
+Route::post('/booking/checkout/{id}', [BookingController::class, 'checkout']);

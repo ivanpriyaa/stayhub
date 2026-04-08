@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'nama_user' => 'admin',
                 'username' => 'admin',
                 'password' => Hash::make('admin123'),
-
+                'role' => 'admin',
             ]
         ];
         foreach ($data as $value) {
@@ -28,10 +28,15 @@ class UserSeeder extends Seeder
                 'nama_user' => $value['nama_user'],
                 'username' => $value['username'],
                 'password' => $value['password'],
+                'role' => $value['role'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
         }
-        User::factory()->count(1)->create();
+        User::factory()->count(5)->state(function () {
+            return [
+                'role' => 'agen', // hanya agen
+            ];
+        })->create();
     }
 }

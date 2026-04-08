@@ -16,8 +16,12 @@
                         <h5>All Booking</h5>
                         <form action="/booking" method="GET">
                             <div class="input-group">
-                                <input type="date" name="tgl" class="form-control" placeholder="Cari villa/Customer..." value="{{ request('tgl') }}" style="margin-right: 10px; border-radius: 5px;">
-                                <input type="text" name="search" class="form-control" placeholder="Cari villa/Customer..." value="{{ request('search') }}" style="margin-right: 10px; border-radius: 5px;">
+                                <input type="date" name="tgl" class="form-control"
+                                    placeholder="Cari villa/Customer..." value="{{ request('tgl') }}"
+                                    style="margin-right: 10px; border-radius: 5px;">
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Cari villa/Customer..." value="{{ request('search') }}"
+                                    style="margin-right: 10px; border-radius: 5px;">
                                 <button class="btn btn-ae" type="submit" style="border-radius: 5px 0 0 5px;">
                                     Cari
                                 </button>
@@ -37,6 +41,7 @@
                                     <th width="120" style="background-color: #8a76526c;"> Check-In</th>
                                     <th width="120" style="background-color: #8a76526c;"> Check-Out</th>
                                     <th width="120" style="background-color: #8a76526c;"> Harga</th>
+                                    <th width="120" style="background-color: #8a76526c;"> Status</th>
                                     <th width="120" style="background-color: #8a76526c;text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -55,12 +60,39 @@
                                         <td>{{ \Carbon\Carbon::parse($b->tglcekin)->translatedFormat('d F Y H:i') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($b->tglcekout)->translatedFormat('d F Y H:i') }}</td>
                                         <td>Rp. {{ number_format($b->total_harga, 0, '.', '.') }}</td>
+                                        <td>
+                                            @php
+                                                $status = strtolower($b->status);
+                                            @endphp
+
+                                            <span
+                                                style="
+                                                    font-weight:600;
+                                                    padding:5px 10px;
+                                                    border-radius:8px;
+                                                    color:#fff;
+
+                                                    @if ($status == 'booking' || $status == 'terbooking') background:#eba134;
+                                                    @elseif($status == 'checkin')
+                                                        background:#0d6efd;
+                                                    @elseif($status == 'selesai')
+                                                        background:#198754;
+                                                    @elseif($status == 'cancel')
+                                                        background:#dc3545;
+                                                    @else
+                                                        background:#6c757d; @endif
+                                                ">
+                                                {{ $b->status }}
+                                            </span>
+                                        </td>
                                         <td style="text-align: center;">
-                                            <a href="/booking/edit_booking/{{ $b->idbooking }}" class="btn btn-warning btn-sm mb-2">
+                                            <a href="/booking/edit_booking/{{ $b->idbooking }}"
+                                                class="btn btn-warning btn-sm mb-2">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
-                                            <a href="/booking/delete_booking/{{ $b->idbooking }}" class="btn btn-danger btn-sm mb-2">
+                                            <a href="/booking/delete_booking/{{ $b->idbooking }}"
+                                                class="btn btn-danger btn-sm mb-2">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </td>

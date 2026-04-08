@@ -27,6 +27,15 @@
                             <input type="password" name="password" class="form-control">
                         </div>
 
+                        <div class="mb-3">
+                            <label>Role</label>
+                            <select name="role" class="form-select">
+                                <option selected>-- Pilih Role --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Agen">Agen</option>
+                            </select>
+                        </div>
+
                         <button class="btn btn-ae">Simpan</button>
                         <a href="/user" class="btn btn-secondary">Kembali</a>
                     </form>

@@ -44,7 +44,8 @@ class UserController extends Controller
             // 'iduser' => $kode,
             'nama_user' => $request->nama_user,
             'username' => $request->username,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         return redirect('/user');

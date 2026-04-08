@@ -15,7 +15,11 @@ return new class extends Migration
             $table->string('idvilla')->primary();
             $table->string('nama_villa');
             $table->string('alamat_villa');
+            $table->text('deskripsi_villa')->nullable();
             $table->integer('harga_villa')->unsigned();
+
+            $table->string('gambar_villa')->nullable(); // simpan path gambar
+            $table->integer('jumlah_kamar_tidur')->unsigned();
             $table->timestamps();
         });
     }

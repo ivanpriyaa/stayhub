@@ -14,7 +14,6 @@ class BookingController extends Controller
         $query = Booking::with(['villa', 'customer']);
         $tanggal = $request->tgl;
 
-
         if ($request->input('search')) {
             $search = $request->input('search');
 
@@ -50,8 +49,15 @@ class BookingController extends Controller
         $villa = Villa::orderBy('idvilla', 'asc')->get();
 
         $tanggal = $request->tanggal;
+        $villaSelected = $request->villa
+            ? strtolower(explode(' ', $request->villa)[0])
+            : '';
 
-        return view('tambah_booking', compact('customer', 'villa', 'tanggal'));
+        $villaUnitSelected = $request->villa
+            ? strtolower($request->villa)
+            : '';
+
+        return view('tambah_booking', compact('customer', 'villa', 'tanggal', 'villaSelected', 'villaUnitSelected'));
         // return view('tambah_booking', compact('customer', 'villa'));
     }
 
@@ -112,6 +118,7 @@ class BookingController extends Controller
                 'idcustomer' => $kode,
                 'nama_customer' => $request->nama_customer,
                 'notelp_customer' => $request->notelp_customer,
+                'alamat_customer' => $request->alamat_customer ?? ''
             ]);
         }
 
@@ -129,6 +136,7 @@ class BookingController extends Controller
 
         // Cek bentrok booking (villa + tanggal overlap)
         $cekBentrok = Booking::where('idvilla', $request->idvilla)
+            ->whereNotIn('status', ['Cancel', 'Selesai'])
             ->where(function ($query) use ($request) {
                 $query->whereBetween('tglcekin', [$request->tglcekin, $request->tglcekout])
                     ->orWhereBetween('tglcekout', [$request->tglcekin, $request->tglcekout])
@@ -140,7 +148,8 @@ class BookingController extends Controller
             ->exists();
 
         if ($cekBentrok) {
-            return back()->with('error', 'Villa terisi pada tanggal dan jam tersebut!');
+            $villa = Villa::find($request->idvilla);
+            return back()->with('error', 'Villa ' . $villa->nama_villa . ' terisi pada tanggal dan jam tersebut!');
         } else {
 
             // Simpan booking
@@ -156,6 +165,7 @@ class BookingController extends Controller
                 'pic' => $request->pic,
                 'nama_agen' => $request->nama_agen,
                 'note' => $request->note ?? '',
+                'status' => $request->status ?? 'Booking',
             ]);
 
             if ($request->from == 'calendar') {
@@ -187,7 +197,8 @@ class BookingController extends Controller
             'idcustomer' => 'nullable|string|max:255',
             'tglcekout' => 'required|after:tglcekin',
             'note' => 'nullable|string',
-            'nama_agen' => 'nullable'
+            'nama_agen' => 'nullable',
+            'status' => 'nullable'
         ]);
 
         // Cari booking yang akan diedit
@@ -215,6 +226,7 @@ class BookingController extends Controller
                 'idcustomer' => $kode,
                 'nama_customer' => $request->nama_customer,
                 'notelp_customer' => $request->notelp_customer,
+                'alamat_customer' => null
             ]);
         }
         // Update booking
@@ -227,7 +239,8 @@ class BookingController extends Controller
             'tglcekout' => $request->tglcekout,
             'note' => $request->note ?? '',
             'pic' => $request->pic,
-            'nama_agen' => $request->nama_agen
+            'nama_agen' => $request->nama_agen,
+            'status' => $request->status ?? 'TerBooking',
         ];
 
         if ($request->idvilla) {
@@ -245,5 +258,45 @@ class BookingController extends Controller
         $booking->delete();
 
         return redirect('/booking');
+    }
+
+    public function cancel($id)
+    {
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        // ubah status jadi Cancel
+        $booking->status = 'Cancel';
+        $booking->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking berhasil dibatalkan'
+        ]);
+    }
+
+    public function checkin($id)
+    {
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        $booking->status = 'Checkin';
+        $booking->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Checkin'
+        ]);
+    }
+
+    public function checkout($id)
+    {
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        $booking->status = 'Selesai';
+        $booking->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Checkout'
+        ]);
     }
 }

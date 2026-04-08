@@ -122,13 +122,10 @@
                                         {{ $villa->nama_villa }}
                                     </option>
                                 @endforeach
-
                             </select>
                             {{-- @endif --}}
                         </div>
-
                         <h3 id="calendarTitle"></h3>
-
                     </div>
                     <div id="calendar"></div>
                     <div class="modal fade" id="eventModal" tabindex="-1">
@@ -145,8 +142,20 @@
                                     <p><b>Checkin :</b> <span id="modalStart"></span></p>
                                     <p><b>Checkout :</b> <span id="modalEnd"></span></p>
                                     <p><b>PIC :</b> <span id="modalPic"></span></p>
+                                    <p><b>Status :</b> <span id="modalStatus"></span></p>
                                 </div>
 
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" id="btnClose" class="btn btn-danger d-none"
+                                        style="font-weight: 600;">Cancel Booking</button>
+                                    <button type="button" id="btnCin" class="btn d-none"
+                                        style="background-color: #0d6efd;color: white;font-weight: 600;"
+                                        style="font-weight: 600;">Checkin</button>
+                                    <button type="button" id="btnCout" class="btn d-none"
+                                        style="background-color: #198754;color: white;font-weight: 600;"
+                                        style="font-weight: 600;">Checkout</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,6 +245,52 @@
             let calendarEl = document.getElementById('calendar');
             let isMobile = window.innerWidth < 768;
 
+            // ---- Palette warna gelap aman ----
+            function generateSafeDarkColors(count) {
+                const colors = [];
+                while (colors.length < count) {
+                    const r = Math.floor(Math.random() * 150);
+                    const g = Math.floor(Math.random() * 150);
+                    const b = Math.floor(Math.random() * 150);
+                    let hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    if (
+                        (r > g + b) ||
+                        (g > r + b) ||
+                        (b > r + g) ||
+                        hex.toLowerCase() === '#8a7650' ||
+                        hex.toLowerCase() === '#dc3545' ||
+                        hex.toLowerCase() === '#198754' ||
+                        hex.toLowerCase() === '#0d6efd' ||
+                        hex.toLowerCase() === '#fff'
+                    ) continue;
+                    colors.push(hex);
+                }
+                return colors;
+            }
+
+            // buat palette 30 warna gelap
+            const darkPalette = generateSafeDarkColors(30);
+
+            // fungsi hash sederhana supaya event sama dapat warna sama
+            function stringToIndex(str, max) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                return Math.abs(hash) % max;
+            }
+
+            function getStatusColor(status) {
+                status = status.toLowerCase();
+
+                if (status === 'booking' || status === 'terbooking') return '#eba134'; // coklat
+                if (status === 'checkin') return '#0d6efd';
+                if (status === 'selesai') return '#198754';
+                if (status === 'cancel') return '#dc3545';
+
+                return '#000';
+            }
+
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 height: 650,
@@ -264,6 +319,7 @@
                     let title = arg.event.title;
                     let time = arg.timeText;
                     let pic = arg.event.extendedProps.pic || '-';
+                    let status = arg.event.extendedProps.status || '-';
 
 
                     let start = arg.event.start;
@@ -291,9 +347,23 @@
                         return {
                             html: `
                                 <div style="font-size:10px; line-height:1.2">
-                                    <div style="font-weight:600;">${title}</div>
+                                    <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
                                     <div>${startTime}-${endTime}</div>
-                                    <div style="color:#555;">PIC: ${pic}</div>
+                                    <div>PIC : ${pic}</div>
+                                    <div>Status : </div>
+                                    <br>
+                                    <div style="display:flex;justify-content:center;align-items:center;">
+                                        <span style="
+                                            background:${getStatusColor(status)};
+                                            color:#fff;
+                                            padding:2px 6px;
+                                            border-radius:6px;
+                                            font-size:8px;
+                                            font-weight:600;
+                                        ">
+                                            ${status}
+                                        </span>
+                                    </div>
                                 </div>
                             `
                         };
@@ -303,7 +373,19 @@
                             html: `
                                 <div>
                                     ${title} | ${startTime} - ${endTime} <br>
-                                    <small>PIC: ${pic}</small>
+                                    <small>
+                                        PIC : ${pic} |
+                                        Status : 
+                                            <span style="
+                                                background:${getStatusColor(status)};
+                                                color:#fff;
+                                                padding:2px 6px;
+                                                border-radius:6px;
+                                                font-size:11px;
+                                                font-weight:600;
+                                            ">${status}
+                                            </span>
+                                    </small>
                                 </div>
                             `
                         };
@@ -316,30 +398,29 @@
 
                 eventDidMount: function(info) {
 
-                    let villa = info.event.title.toLowerCase();
+                    // pilih warna dari palette berdasarkan judul event
+                    let villa = (info.event.extendedProps.villa || info.event.title).toLowerCase();
 
-                    if (villa.includes('bromo 1')) {
-                        info.el.style.backgroundColor = '#0f8300'; // biru
-                        info.el.style.borderColor = '#0f8300';
+                    // jika belum ada warna, buatkan
+                    if (!window.villaColors) window.villaColors = {};
+
+                    if (!villaColors[villa]) {
+                        let index = stringToIndex(villa, darkPalette.length);
+                        villaColors[villa] = darkPalette[index];
                     }
 
-                    if (villa.includes('bromo 2')) {
-                        info.el.style.backgroundColor = '#4CAF50'; // hijau
-                        info.el.style.borderColor = '#4CAF50';
-                    }
+                    let color = villaColors[villa];
 
-                    if (villa.includes('topaz')) {
-                        info.el.style.backgroundColor = '#2196F3'; // orange
-                        info.el.style.borderColor = '#2196F3';
-                    }
-
-                    if (villa.includes('medan')) {
-                        info.el.style.backgroundColor = '#FF9800'; // orange
-                        info.el.style.borderColor = '#FF9800';
-                    }
+                    info.el.style.backgroundColor = color;
+                    info.el.style.borderColor = color;
+                    info.el.style.color = '#ffffff';
                 },
 
                 eventClick: function(info) {
+                    let pic = info.event.extendedProps.pic || "-";
+                    let authPIC = "{{ auth()->user()->username }}";
+                    let userRole = "{{ auth()->user()->role }}";
+                    let status = info.event.extendedProps.status || "";
 
                     document.getElementById("modalVilla").innerText = info.event.title;
 
@@ -351,6 +432,46 @@
 
                     document.getElementById("modalPic").innerText =
                         info.event.extendedProps.pic || "-";
+
+                    document.getElementById("modalStatus").innerText =
+                        info.event.extendedProps.status || "-";
+
+                    let btn = document.getElementById("btnClose");
+                    let btncin = document.getElementById("btnCin");
+                    let btncout = document.getElementById("btnCout");
+                    btn.dataset.id = info.event.id;
+                    btncin.dataset.id = info.event.id;
+                    btncout.dataset.id = info.event.id;
+
+                    let picClean = pic.trim().toLowerCase();
+                    let authClean = authPIC.trim().toLowerCase();
+                    let statusClean = status.trim().toLowerCase();
+
+                    if (picClean === authClean && statusClean !== "closing") {
+                        btn.classList.remove("d-none"); // tampilkan
+                    } else {
+                        btn.classList.add("d-none"); // sembunyikan
+                    }
+
+                    if (userRole === "admin" || userRole === "super admin") {
+                        if (statusClean === "terbooking") {
+                            btncin.classList.remove("d-none");
+                            btn.classList.remove("d-none");
+                            btncout.classList.add("d-none");
+                        }
+
+                        if (statusClean === "checkin") {
+                            btncin.classList.add("d-none");
+                            btncout.classList.remove("d-none");
+                            btn.classList.add("d-none");
+                        }
+                    }
+
+                    if (statusClean === "cancel" || statusClean === "selesai") {
+                        btn.classList.add("d-none");
+                        btncin.classList.add("d-none");
+                        btncout.classList.add("d-none");
+                    }
 
                     let modal = new bootstrap.Modal(document.getElementById('eventModal'));
                     modal.show();
@@ -407,8 +528,19 @@
                         return; // tidak melakukan apa-apa jika tanggal sebelum hari ini
                     }
 
+                    // 🔥 cek filter villa
+                    let selectedVilla = document.getElementById("villaFilter").value;
+                    
+                    if (selectedVilla === "all") {
+                        alert("Pilih villa terlebih dahulu sebelum menambah booking!");
+                        return;
+                    }
+
+                    let villaGroup = selectedVilla.split(' ')[0];
+
                     // redirect ke halaman tambah booking
                     window.location.href = "/booking/tambah_booking?tanggal=" + tanggal +
+                        "&villa=" + encodeURIComponent(selectedVilla.toLowerCase()) +
                         "&from=calendar";
                 },
 
@@ -611,6 +743,121 @@
                     }
                 }
             });
+
+        });
+    </script>
+    <script>
+        document.getElementById('btnClose').addEventListener('click', function() {
+
+            const id = this.dataset.id;
+
+            if (!id) {
+                alert('ID booking tidak ditemukan');
+                return;
+            }
+
+            if (!confirm('Yakin ingin cancel booking ini?')) return;
+
+            fetch(`/booking/cancel/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+
+                        // 🔥 BONUS: langsung update calendar TANPA reload
+                        let event = calendar.getEventById(id);
+
+                        if (event) {
+                            event.setExtendedProp('status', 'Cancel');
+
+                            // optional: ubah warna jadi abu
+                            event.setProp('backgroundColor', '#999');
+                            event.setProp('borderColor', '#999');
+                        }
+
+                        // tutup modal
+                        let modal = bootstrap.Modal.getInstance(document.getElementById('eventModal'));
+                        modal.hide();
+                    }
+
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Terjadi error');
+                });
+        });
+    </script>
+    <script>
+        document.getElementById('btnCin').addEventListener('click', function() {
+
+            const id = this.dataset.id;
+
+            if (!confirm('Checkin sekarang?')) return;
+
+            fetch(`/booking/checkin/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+
+                        let event = calendar.getEventById(id);
+
+                        if (event) {
+                            event.setExtendedProp('status', 'Checkin');
+                        }
+
+                        bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+                    }
+
+                });
+
+        });
+    </script>
+    <script>
+        document.getElementById('btnCout').addEventListener('click', function() {
+
+            const id = this.dataset.id;
+
+            if (!confirm('Checkout sekarang?')) return;
+
+            fetch(`/booking/checkout/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+
+                        let event = calendar.getEventById(id);
+
+                        if (event) {
+                            event.setExtendedProp('status', 'Selesai');
+                        }
+
+                        bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+                    }
+
+                });
 
         });
     </script>

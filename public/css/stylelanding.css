@@ -1,0 +1,400 @@
+.josefin-sans-tulisan {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.inter-tulisan {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background-color: #f8f9fb;
+}
+
+.nave {
+    background-color: rgb(255, 255, 255);
+}
+
+.heade {
+    background-color: white;
+    height: 550px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("/images/bannere.jpeg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 90%;
+    border-radius: 50px;
+}
+
+.banner-kiri {
+    /* color: white; */
+    /* background-color: aqua; */
+    width: 50%;
+    margin-left: 40px;
+}
+
+.banner-kiri h3 {
+    color: white;
+    font-weight: 700;
+    font-size: 56px;
+}
+
+.banner-kiri p {
+    color: white;
+}
+
+.banner-kanan {
+    display: flex;
+    justify-content: end;
+}
+
+.kotak {
+    background-color: white;
+    border-radius: 30px;
+    padding: 30px;
+    margin-right: 10%;
+    width: 50%;
+    height: 30%;
+}
+
+.tombole {
+    background-color: #febd22;
+    width: 100%;
+    color: white;
+    font-weight: 700;
+}
+
+.bestt p {
+    margin-bottom: -10px;
+}
+
+.bestt .explore {
+    color: #959493;
+}
+
+.bestt h3 {
+    font-size: 50px;
+}
+
+.beste a {
+    text-decoration: none;
+}
+
+.villaSwiper {
+    padding: 20px 15px;
+    /* overflow: visible; */
+}
+
+.swiper-wrapper {
+    overflow: visible;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.carde {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: 20px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.carde:hover {
+    transform: translateY(-5px);
+}
+
+.bedroom {
+    margin-top: -15px;
+    color: #959493;
+}
+
+.hrga {
+    display: flex;
+    justify-content: space-between;
+    /* background-color: aqua; */
+    align-items: end;
+}
+
+.hargaa {
+    font-weight: bold;
+}
+
+.rekom-destinasi h3 {
+    font-size: 50px;
+}
+
+.rekom-destinasi p {
+    margin-bottom: -10px;
+}
+
+.destinasiSwiper {
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.img-box {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.text-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.cardfaqs{
+    border-color: #f8f9fb;
+}
+
+.faqs{
+    background-color: #f8f9fb;
+}
+
+.faqs button:focus,
+.faqs button:active,
+.faqs button:focus-visible,
+.faqs .btn:focus,
+.faqs .btn:active,
+.faqs .btn:first-child:active,
+.faqs .btn:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none;
+}
+
+.faqs .btn {
+    padding: 12px 16px;
+    line-height: 1.5;
+}
+
+.faqs .icon-arrow {
+    transition: transform 0.3s ease;
+}
+.faqs button:not(.collapsed) .icon-arrow {
+    transform: rotate(180deg);
+}
+
+.cardfaqs{
+    background-color: #f8f9fb;
+    border: 1px solid #959493;
+}
+/* MOBILE */
+@media (max-width: 768px) {
+    .banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .banner-kiri {
+        width: 100%;
+    }
+
+    .banner-kanan {
+        width: 100%;
+    }
+
+    .banner-kiri {
+        margin-left: 0;
+    }
+
+    .banner-kiri h3 {
+        font-size: 24px;
+    }
+
+    .banner-kanan {
+        margin-left: 0;
+    }
+
+    .kotak {
+        margin: 0;
+        height: auto;
+        width: 100%;
+        font-size: 15px;
+    }
+
+    .kotak p {
+        margin-bottom: 10px;
+    }
+
+    /* LABEL */
+    .kotak .form-label {
+        margin-bottom: 3px; /* lebih dekat ke input */
+        font-size: 14px;
+    }
+
+    /* INPUT */
+    .kotak .form-control {
+        padding: 6px 10px; /* lebih kecil */
+        font-size: 14px;
+    }
+
+    /* SPACING ANTAR FIELD */
+    .kotak .mb-3 {
+        margin-bottom: 10px !important; /* sebelumnya bootstrap ~16px */
+    }
+
+    /* ROW CEK IN - CEK OUT */
+    .kotak .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+
+    .kotak .col-6 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    /* BUTTON */
+    .tombole {
+        margin-top: 10px;
+        padding: 8px;
+    }
+
+    .bestt p {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .bestt .explore {
+        width: 70% !important;
+        font-size: 10px;
+    }
+
+    .bestt h3 {
+        font-size: 20px;
+    }
+
+    .beste a {
+        text-decoration: none;
+    }
+
+    .carde img {
+        height: 2%;
+    }
+
+    .carde h5 {
+        font-size: small;
+        font-weight: 700;
+    }
+
+    .cardb {
+        padding: 0;
+        margin-top: 5px;
+    }
+
+    .cardb p {
+        font-size: small;
+    }
+
+    .bedroom {
+        margin-top: -15px;
+        color: #959493;
+    }
+
+    .hrga {
+        flex-direction: column-reverse;
+    }
+
+    .hrga p {
+        font-size: 11px !important;
+    }
+
+    .hrga .hargaa {
+        font-size: 18px !important;
+        align-items: center;
+        margin-top: -20px;
+    }
+
+    .rekom-destinasi h3 {
+        font-size: 20px;
+    }
+
+    .rekom-destinasi p {
+        margin-bottom: 0;
+        font-size: 15px;
+    }
+
+    .card-header .btn:focus,
+    .card-header .btn:active {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .logo-footer {
+        font-size: medium;
+    }
+    .logo-footer img {
+        width: 30px;
+    }
+
+    .copyright {
+        font-size: small;
+    }
+}
+
+@media (max-width: 853px) {
+    .carde img {
+        height: 1%;
+    }
+
+    .hrga {
+        flex-direction: column-reverse;
+    }
+
+    .hrga .hargaa {
+        margin-top: -20px;
+    }
+}
+
+@media (max-width: 953px) {
+    .carde img {
+        height: 1%;
+    }
+
+    .hrga {
+        flex-direction: column-reverse;
+    }
+
+    .hrga p {
+        font-size: 10px;
+    }
+
+    .hrga .hargaa {
+        margin-top: -20px;
+        font-size: 20px;
+    }
+}

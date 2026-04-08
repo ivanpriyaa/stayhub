@@ -11,7 +11,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="/villa/store">
+                    <form method="POST" action="/villa/store" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
@@ -26,6 +26,19 @@
                         <div class="mb-3">
                             <label>Alamat</label>
                             <textarea name="alamat_villa" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label>Jumlah Kamar Tidur</label>
+                            <input type="number" name="jumlah_kamar_tidur" class="form-control" required min="1"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label>Deskripsi Villa</label>
+                            <textarea name="deskripsi_villa" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Upload Gambar</label>
+                            <input type="file" name="gambar_villa[]" class="form-control" multiple>
                         </div>
 
                         <button class="btn btn-ae">Simpan</button>

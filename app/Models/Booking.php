@@ -25,7 +25,8 @@ class Booking extends Model
         'note',
         'harga',
         'total_harga',
-        'nama_agen'
+        'nama_agen',
+        'status'
     ];
 
     public function customer()

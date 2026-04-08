@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Villa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Models\VillaImage;
 
 class VillaController extends Controller
 {
@@ -27,6 +31,16 @@ class VillaController extends Controller
 
     public function store(Request $request)
     {
+        // validasi
+        $request->validate([
+            'nama_villa' => 'required',
+            'harga_villa' => 'required|numeric',
+            'alamat_villa' => 'required',
+            'jumlah_kamar_tidur' => 'required|numeric',
+            'deskripsi_villa' => 'nullable|string',
+            'gambar_villa.*' => 'image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
         $villa = Villa::latest()->first();
 
         if (!$villa) {
@@ -38,13 +52,37 @@ class VillaController extends Controller
 
             $kode = 'VLL' . str_pad($nomor, 4, "0", STR_PAD_LEFT);
         }
-
-        Villa::create([
+        $defaultImage = 'villa/default.jpg';
+        $dataVilla = Villa::create([
             'idvilla' => $kode,
             'nama_villa' => $request->nama_villa,
             'harga_villa' => $request->harga_villa,
-            'alamat_villa' => $request->alamat_villa
+            'alamat_villa' => $request->alamat_villa,
+            'jumlah_kamar_tidur' => $request->jumlah_kamar_tidur,
+            'deskripsi_villa' => $request->deskripsi_villa ?? '',
+            'gambar_villa' => $defaultImage
         ]);
+
+        if ($request->hasFile('gambar_villa')) {
+            foreach ($request->file('gambar_villa') as $index => $file) {
+                try {
+                    $path = $file->store('villa', 'public');
+
+                    // Simpan ke tabel villa_images
+                    VillaImage::create([
+                        'villa_id' => $dataVilla->idvilla,
+                        'gambar' => $path
+                    ]);
+
+                    // Set gambar pertama jadi thumbnail
+                    if ($index == 0) {
+                        $dataVilla->update(['gambar_villa' => $path]);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Upload gagal: ' . $e->getMessage());
+                }
+            }
+        }
 
         return redirect('/villa');
     }
@@ -70,10 +108,27 @@ class VillaController extends Controller
 
     public function destroy_villa($id)
     {
-        $villa = Villa::find($id);
-        $villa->delete();
+        DB::beginTransaction();
+        try {
+            $villa = Villa::findOrFail($id);
 
-        return redirect('/villa');
+            // Hapus semua gambar villa dari storage dan DB
+            foreach ($villa->images as $img) {
+                if (Storage::disk('public')->exists($img->gambar)) {
+                    Storage::disk('public')->delete($img->gambar);
+                }
+                $img->delete();
+            }
+
+            // Hapus villa
+            $villa->delete();
+
+            DB::commit();
+            return redirect('/villa')->with('success', 'Villa dan semua gambarnya berhasil dihapus');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('/villa')->with('error', 'Gagal menghapus villa: ' . $e->getMessage());
+        }
     }
 
     public function available()

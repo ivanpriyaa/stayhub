@@ -19,10 +19,18 @@ class Villa extends Model
         'idvilla',
         'nama_villa',
         'alamat_villa',
-        'harga_villa'
+        'harga_villa',
+        'jumlah_kamar_tidur',
+        'deskripsi_villa',
+        'gambar_villa',
     ];
     public function booking()
     {
         return $this->hasMany(Booking::class, 'idvilla');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(VillaImage::class, 'villa_id', 'idvilla');
     }
 }

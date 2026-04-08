@@ -16,7 +16,8 @@
                         <h5>All Villa</h5>
                         <form action="/villa" method="GET">
                             <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Cari villa..." value="{{ request('search') }}">
+                                <input type="text" name="search" class="form-control" placeholder="Cari villa..."
+                                    value="{{ request('search') }}">
                                 <button class="btn btn-ae" type="submit">
                                     Cari
                                 </button>
@@ -43,9 +44,19 @@
                                         <td>Rp. {{ number_format($v->harga_villa, 0, '.', '.') }}</td>
                                         <td>{{ $v->alamat_villa }}</td>
                                         <td style="text-align: center;">
-                                            <a href="/villa/edit_villa/{{ $v->idvilla }}" class="btn btn-warning btn-sm mb-2">
+                                            <a href="/villa/edit_villa/{{ $v->idvilla }}"
+                                                class="btn btn-warning btn-sm mb-2">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
+                                            <form action="{{ route('villa.destroy', $v->idvilla) }}" method="POST"
+                                                style="display:inline-block;"
+                                                onsubmit="return confirm('Yakin ingin menghapus villa ini beserta semua gambarnya?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm mb-2">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

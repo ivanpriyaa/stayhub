@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('harga')->unsigned();
             $table->integer('total_harga')->unsigned();
             $table->string('nama_agen')->nullable();
+            $table->string('status');
             $table->timestamps();
             $table->foreign('idvilla')->references('idvilla')->on('villa');
             $table->foreign('idcustomer')->references('idcustomer')->on('customers');

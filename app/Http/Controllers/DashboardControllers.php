@@ -39,13 +39,30 @@ class DashboardControllers extends Controller
             : 0;
 
         // DATA EVENT CALENDAR
+        // $events = Booking::with('villa', 'customer')->get()->map(function ($b) {
+        //     return [
+        //         'id' => $b->idbooking,
+        //         'title' => optional($b->villa)->nama_villa . ' - ' . optional($b->customer)->nama_customer,
+        //         'start' => $b->tglcekin,
+        //         'end' => $b->tglcekout,
+        //         'pic' => $b->pic == 'agen' ? $b->nama_pic : $b->pic,
+        //         'villa' => optional($b->villa)->nama_villa,
+        //         'status' => $b->status,
+        //         'color' => '#8A7650'
+        //     ];
+        // });
+
         $events = Booking::with('villa', 'customer')->get()->map(function ($b) {
             return [
+                'id' => $b->idbooking,
                 'title' => optional($b->villa)->nama_villa . ' - ' . optional($b->customer)->nama_customer,
                 'start' => $b->tglcekin,
                 'end' => $b->tglcekout,
-                'pic' => $b->pic == 'agen' ? $b->nama_pic : $b->pic,
                 'villa' => optional($b->villa)->nama_villa,
+                'extendedProps' => [
+                    'pic' => $b->pic == 'agen' ? $b->nama_pic : $b->pic,
+                    'status' => $b->status,
+                ],
                 'color' => '#8A7650'
             ];
         });
