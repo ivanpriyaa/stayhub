@@ -86,10 +86,19 @@
                                             </span>
                                         </td>
                                         <td style="text-align: center;">
-                                            <a href="/booking/edit_booking/{{ $b->idbooking }}"
+                                            {{-- {{ dd(Auth::user()->role) }} --}}
+                                            @auth
+                                                @if (Auth::user()->role === 'admin')
+                                                    <a href="/booking/edit_booking/{{ $b->idbooking }}"
+                                                        class="btn btn-warning btn-sm mb-2">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                @endif
+                                            @endauth
+                                            {{-- <a href="/booking/edit_booking/{{ $b->idbooking }}"
                                                 class="btn btn-warning btn-sm mb-2">
                                                 <i class="bi bi-pencil"></i>
-                                            </a>
+                                            </a> --}}
 
                                             <a href="/booking/delete_booking/{{ $b->idbooking }}"
                                                 class="btn btn-danger btn-sm mb-2">
