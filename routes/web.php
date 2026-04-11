@@ -9,10 +9,11 @@ use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    // return view('welcome');
-    return view('landingpage-home');
-});
+// Route::get('/', function () {
+//     // return view('welcome');
+//     return view('landingpage-home');
+// });
+Route::get('/', [LandingPageController::class, 'landingPage']);
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -48,6 +49,8 @@ Route::get('/villa/edit_villa/{id}', [villaController::class, 'edit_villa'])->mi
 Route::post('/villa/update_villa/{id}', [villaController::class, 'update_villa']);
 Route::post('/villa/store', [VillaController::class, 'store']);
 Route::delete('/villa/{id}', [VillaController::class, 'destroy_villa'])->name('villa.destroy');
+Route::delete('/villa/delete_image/{id}', [VillaController::class, 'delete_image']);
+Route::post('/villa/set_thumbnail/{id}', [VillaController::class, 'set_thumbnail'])->name('villa.set_thumbnail');
 
 // Booking
 Route::get('/booking', [BookingController::class, 'booking'])->middleware('auth')->name('booking');

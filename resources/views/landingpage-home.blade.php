@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StayHub</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -91,62 +92,36 @@
     </div>
     <br>
     <div class="container">
-        <div class="swiper villaSwiper">
+        <div class="swiper bestVillaSwiper">
             <div class="swiper-wrapper">
 
-                <!-- CARD 1 -->
-                <div class="swiper-slide">
-                    <a href="" style="text-decoration: none;color: inherit">
+                @foreach ($bestVillas as $villa)
+                    <div class="swiper-slide">
                         <div class="card carde">
-                            <img src="images/villa.jpg" class="card-img-top">
+                            {{-- <img src="{{ asset('images/villa/' . $villa->gambar_villa) }}" class="card-img-top"> --}}
+                            {{-- <img src="{{ asset('storage/' . $villa->mainImage->image) }}" class="card-img-top"> --}}
+                            {{-- <img src="{{ $villa->mainImage ? asset('storage/' . $villa->mainImage->image) : asset('images/default.jpg') }}"
+                                class="card-img-top"> --}}
+                            {{-- <img src="{{ $villa->mainImage ? asset('storage/' . $villa->mainImage->image) : asset('images/villa/default.jpg.png') }}"
+                                class="card-img-top"> --}}
+                            <img src="{{ $villa->gambar_villa && $villa->gambar_villa != ''
+                                ? asset('storage/' . $villa->gambar_villa)
+                                : asset('storage/villa/default.jpg') }}"
+                                class="card-img-top">
                             <div class="card-body cardb">
-                                <h5 class="card-title">QWITE House</h5>
-                                <p><i class="bi bi-geo-alt" style="color:#FEBD22"></i> Klakah, Bromo</p>
-                                <p class="bedroom"><i class="bx bx-bed"></i> 4 room</p>
+                                <h5 class="card-title">{{ $villa->nama_villa }}</h5>
+                                <p><i class="bi bi-geo-alt" style="color:#FEBD22"></i> {{ $villa->alamat_villa }}</p>
+                                <p class="bedroom"><i class="bx bx-bed"></i> {{ $villa->jumlah_kamar_tidur }} rooms</p>
                                 <div class="hrga">
-                                    <p class="hargaa">Rp. 700K</p>
-                                    <p style="color:#959493;"><i class="bi bi-moon-stars"></i> 1 Day/Night</p>
+                                    <p class="hargaa">Rp. {{ number_format($villa->harga_villa, 0, ',', '.') }}</p>
+                                    <p style="color:#959493;">
+                                        <i class="bi bi-moon-stars"></i> 1/days
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    </a>
-                </div>
-
-                <!-- CARD 2 -->
-                <div class="swiper-slide">
-                    <a href="" style="text-decoration: none;color: inherit">
-                        <div class="card carde">
-                            <img src="images/villa.jpg" class="card-img-top">
-                            <div class="card-body cardb">
-                                <h5 class="card-title">QWITE House</h5>
-                                <p><i class="bi bi-geo-alt" style="color:#FEBD22"></i> Klakah, Bromo</p>
-                                <p class="bedroom"><i class="bx bx-bed"></i> 4 room</p>
-                                <div class="hrga">
-                                    <p class="hargaa">Rp. 700K</p>
-                                    <p style="color:#959493;"><i class="bi bi-moon-stars"></i> 1 Day/Night</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- CARD 3 -->
-                <div class="swiper-slide">
-                    <a href="" style="text-decoration: none;color: inherit">
-                        <div class="card carde">
-                            <img src="images/villa.jpg" class="card-img-top">
-                            <div class="card-body cardb">
-                                <h5 class="card-title">QWITE House</h5>
-                                <p><i class="bi bi-geo-alt" style="color:#FEBD22"></i> Klakah, Bromo</p>
-                                <p class="bedroom"><i class="bx bx-bed"></i> 4 room</p>
-                                <div class="hrga">
-                                    <p class="hargaa">Rp. 700K</p>
-                                    <p style="color:#959493;"><i class="bi bi-moon-stars"></i> 1 Day/Night</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                @endforeach
 
             </div>
         </div>
@@ -369,6 +344,26 @@
                 },
                 1024: {
                     slidesPerView: 4
+                }
+            }
+        });
+    </script>
+    <script>
+        new Swiper(".bestVillaSwiper", {
+            slidesPerView: 1,
+            spaceBetween: 15,
+            loop: true,
+            grabCursor: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2
+                },
+                1024: {
+                    slidesPerView: 3
                 }
             }
         });

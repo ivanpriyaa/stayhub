@@ -21,7 +21,7 @@
             <h4 class="itim-regular tagline" style="text-align: center;font-size: 15px;">Smart Booking Management</h4>
 
             <ul class="nav flex-column p-2">
-                @if (auth()->user()->role == 'admin')
+                @if (strtolower(auth()->user()->role) == 'admin')
                     <li class="nav-item mb-1">
                         <a href="{{ url('/dashboard') }}"
                             class="nav-link inria-sans-regular {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -61,7 +61,7 @@
                                 class="bi bi-building-add"></i></span> Booking Villa</a>
                     </li>
                 @else
-                <li class="nav-item mb-1">
+                    <li class="nav-item mb-1">
                         <a href="{{ url('/dashboard') }}"
                             class="nav-link inria-sans-regular {{ request()->is('dashboard') ? 'active' : '' }}">
                             <i class="bi bi-house-door"></i> Home

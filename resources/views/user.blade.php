@@ -32,6 +32,7 @@
                                 <tr>
                                     <th width="120" style="background-color: #8a76526c;">Nama</th>
                                     <th width="120" style="background-color: #8a76526c;">Username</th>
+                                    <th width="120" style="background-color: #8a76526c;">Role</th>
                                     {{-- <th width="120" style="background-color: #8a76526c;">Password</th> --}}
                                     <th width="120" style="background-color: #8a76526c;text-align: center;">Action</th>
                                 </tr>
@@ -42,6 +43,7 @@
                                     <tr>
                                         <td>{{ $c->nama_user }}</td>
                                         <td>{{ $c->username }}</td>
+                                        <td>{{ $c->role }}</td>
                                         {{-- <td>{{ $c->password }}</td> --}}
                                         <td style="text-align: center;">
                                             <a href="/user/edit_user/{{ $c->iduser }}" class="btn btn-warning btn-sm mb-2">

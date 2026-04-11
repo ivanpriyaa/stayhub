@@ -26,7 +26,7 @@
     {{-- NAV --}}
     <nav class="navbar sticky-top nave">
         <div class="container-fluid">
-            <a class="navbar-brand josefin-sans-tulisan" href="#">
+            <a class="navbar-brand josefin-sans-tulisan" href="/">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo StayHub" width="30" height="30"
                     class="d-inline-block align-text-top">
                 Stay<span style="color: #FEBD22;">Hub</span>
