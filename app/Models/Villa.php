@@ -33,4 +33,9 @@ class Villa extends Model
     {
         return $this->hasMany(VillaImage::class, 'villa_id', 'idvilla');
     }
+
+    public function mainImage()
+    {
+        return $this->hasOne(VillaImage::class, 'villa_id', 'idvilla')->oldest();
+    }
 }

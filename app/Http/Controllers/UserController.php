@@ -64,6 +64,7 @@ class UserController extends Controller
         $user->update([
             'nama_user' => $request->nama_user,
             'username' => $request->username,
+            'role' => $request->role,
             // 'password' => $request->password
         ]);
 

@@ -22,9 +22,27 @@
                             <input type="text" name="username" class="form-control" value="{{ $user->username }}">
                         </div>
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label>Password </label>
-                            <input type="password" name="password" class="form-control" value="">
+                            <input type="password" name="password" class="form-control" >
+                        </div> --}}
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <div class="input-group">
+                                <input type="password" name="password" id="password" class="form-control">
+                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Role</label>
+                            <select name="role" class="form-select">
+                                <option selected>-- Pilih Role --</option>
+                                <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="Agen" {{ $user->role == 'Agen' ? 'selected' : '' }}>Agen</option>
+                            </select>
                         </div>
 
                         <button class="btn btn-ae">Simpan</button>
@@ -34,5 +52,14 @@
             </div>
         </div>
     </div>
-
+    <script>
+        function togglePassword() {
+            var input = document.getElementById("password");
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+    </script>
 @endsection

@@ -89,19 +89,53 @@ class VillaController extends Controller
 
     public function edit_villa($id)
     {
-        $villa = Villa::find($id);
+        $villa = Villa::with('images')->findOrFail($id);
         return view('edit_villa', compact('villa'));
     }
 
     public function update_villa(Request $request, $id)
     {
-        $villa = Villa::find($id);
+        $request->validate([
+            'nama_villa' => 'required',
+            'harga_villa' => 'required|numeric',
+            'alamat_villa' => 'required',
+            'gambar_villa.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $villa = Villa::findOrFail($id);
+
+        // $villa = Villa::find($id);
 
         $villa->update([
             'nama_villa' => $request->nama_villa,
             'harga_villa' => $request->harga_villa,
             'alamat_villa' => $request->alamat_villa
         ]);
+
+        if ($request->hasFile('gambar_villa')) {
+            $files = $request->file('gambar_villa');
+
+            if (!is_array($files)) {
+                $files = [$files];
+            }
+
+            $isDefaultThumbnail = !$villa->gambar_villa || $villa->gambar_villa === 'villa/default.jpg';
+
+            foreach ($files as $index => $file) {
+                $path = $file->store('villa', 'public');
+
+                if ($isDefaultThumbnail && $index === 0) {
+                    $villa->update([
+                        'gambar_villa' => $path
+                    ]);
+                }
+
+                VillaImage::create([
+                    'villa_id' => $villa->idvilla,
+                    'gambar' => $path
+                ]);
+            }
+        }
 
         return redirect('/villa');
     }
@@ -131,6 +165,41 @@ class VillaController extends Controller
         }
     }
 
+    public function delete_image($id)
+    {
+        $image = VillaImage::findOrFail($id);
+        $villa = Villa::findOrFail($image->villa_id);
+
+        $gambarDihapus = $image->gambar;
+
+        // Hapus file dari storage
+        if (Storage::disk('public')->exists($gambarDihapus)) {
+            Storage::disk('public')->delete($gambarDihapus);
+        }
+
+        // Hapus dari database
+        $image->delete();
+
+        // Ambil sisa gambar
+        $sisaGambar = VillaImage::where('villa_id', $villa->idvilla)->get();
+
+        if ($sisaGambar->isEmpty()) {
+            // 🔥 Kalau sudah tidak ada gambar sama sekali
+            $villa->update([
+                'gambar_villa' => 'villa/default.jpg'
+            ]);
+        } else {
+            // Kalau yang dihapus adalah thumbnail
+            if ($villa->gambar_villa == $gambarDihapus) {
+                $villa->update([
+                    'gambar_villa' => $sisaGambar->first()->gambar
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Gambar berhasil dihapus');
+    }
+
     public function available()
     {
         $booking = Booking::with(['villa', 'customer'])->get();
@@ -151,5 +220,17 @@ class VillaController extends Controller
     {
         $villa = Villa::all();
         return view('booking.create', compact('villa'));
+    }
+
+    public function set_thumbnail($id)
+    {
+        $image = VillaImage::findOrFail($id);
+        $villa = Villa::findOrFail($image->villa_id);
+
+        $villa->update([
+            'gambar_villa' => $image->gambar
+        ]);
+
+        return back()->with('success', 'Thumbnail berhasil diubah');
     }
 }
