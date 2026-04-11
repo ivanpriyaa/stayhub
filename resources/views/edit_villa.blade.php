@@ -88,7 +88,7 @@
                                 </div>
                             @empty
                                 <div class="image-wrapper">
-                                    <img src="{{ asset('storage/villa/default.jpg') }}" class="villa-img">
+                                    <img src="{{ asset('images/villa/default.jpg') }}" class="villa-img">
                                 </div>
                             @endforelse
                         </div>

@@ -104,10 +104,17 @@
                                 class="card-img-top"> --}}
                             {{-- <img src="{{ $villa->mainImage ? asset('storage/' . $villa->mainImage->image) : asset('images/villa/default.jpg.png') }}"
                                 class="card-img-top"> --}}
-                            <img src="{{ $villa->gambar_villa && $villa->gambar_villa != ''
+                            @php
+                                $img =
+                                    $villa->gambar_villa && $villa->gambar_villa != 'villa/default.jpg'
+                                        ? asset('storage/' . $villa->gambar_villa)
+                                        : asset('images/villa/default.jpg');
+                            @endphp
+                            <img src="{{ $img }}" class="card-img-top">
+                            {{-- <img src="{{ $villa->gambar_villa && $villa->gambar_villa != ''
                                 ? asset('storage/' . $villa->gambar_villa)
-                                : asset('storage/villa/default.jpg') }}"
-                                class="card-img-top">
+                                : asset('images/villa/default.jpg') }}"
+                                class="card-img-top"> --}}
                             <div class="card-body cardb">
                                 <h5 class="card-title">{{ $villa->nama_villa }}</h5>
                                 <p><i class="bi bi-geo-alt" style="color:#FEBD22"></i> {{ $villa->alamat_villa }}</p>
