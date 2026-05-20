@@ -86,7 +86,7 @@
                                     <label class="form-label">Cek In</label>
                                     <input type="datetime-local" class="form-control" name="tglcekin" id="checkin"
                                         value="{{ $tanggal ? $tanggal . 'T14:00' : date('Y-m-d\T14:00') }}" min="00:00"
-                                        max="23:00" step="3600" required>
+                                        max="23:00" step="60" required>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -94,7 +94,7 @@
                                     <label class="form-label">Cek Out</label>
                                     <input type="datetime-local" class="form-control" name="tglcekout" id="checkout"
                                         value="{{ $tanggal ? date('Y-m-d\T12:00', strtotime($tanggal . ' +1 day')) : date('Y-m-d\T12:00', strtotime('+1 day')) }}"
-                                        min="00:00" max="23:00" step="3600" required>
+                                        min="00:00" max="23:00" step="60" required>
 
                                 </div>
                             </div>
