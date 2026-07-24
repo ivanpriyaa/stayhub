@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Villa;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -111,14 +112,14 @@ class BookingController extends Controller
             } else {
                 $nomor = 1;
             }
-            $kode = 'CUS' . str_pad($nomor, 4, "0", STR_PAD_LEFT);
+            $kode = 'CUS' . str_pad($nomor, 4, '0', STR_PAD_LEFT);
 
             // Simpan customer baru
             $customer = Customer::create([
                 'idcustomer' => $kode,
                 'nama_customer' => $request->nama_customer,
                 'notelp_customer' => $request->notelp_customer,
-                'alamat_customer' => $request->alamat_customer ?? ''
+                'alamat_customer' => $request->alamat_customer ?? '',
             ]);
         }
 
@@ -131,7 +132,7 @@ class BookingController extends Controller
             $get = substr($book->idbooking, 3);
             $no = (int) $get + 1;
 
-            $code = 'BOK' . str_pad($no, 4, "0", STR_PAD_LEFT);
+            $code = 'BOK' . str_pad($no, 4, '0', STR_PAD_LEFT);
         }
 
         // Cek bentrok booking (villa + tanggal overlap)
@@ -149,11 +150,12 @@ class BookingController extends Controller
 
         if ($cekBentrok) {
             $villa = Villa::find($request->idvilla);
+
             return back()->with('error', 'Villa ' . $villa->nama_villa . ' terisi pada tanggal dan jam tersebut!');
         } else {
 
             // Simpan booking
-            Booking::create([
+            $booking = Booking::create([
                 'idbooking' => $code,
                 'tglbooking' => $request->tglbooking,
                 'idvilla' => $request->idvilla,
@@ -168,6 +170,21 @@ class BookingController extends Controller
                 'status' => $request->status ?? 'Booking',
             ]);
 
+            $lastInvoice = Invoice::latest()->first();
+            $nomor = $lastInvoice ? $lastInvoice->id + 1 : 1;
+            $invoiceNumber = 'INV/' .
+                date('Ymd') .
+                '/' .
+                str_pad($nomor, 5, '0', STR_PAD_LEFT);
+
+            Invoice::create([
+                'idbooking' => $booking->idbooking,
+                'nomor_invoice' => $invoiceNumber,
+                'jenis' => $request->metode_pembayaran,
+                'nominal' => $request->nominal_dibayar,
+                'status' => 'Paid',
+            ]);
+
             if ($request->from == 'calendar') {
                 return redirect('/dashboard')->with('success', 'Booking berhasil disimpan!');
             } else {
@@ -175,6 +192,7 @@ class BookingController extends Controller
             }
         }
     }
+
     public function edit_booking($id)
     {
         $booking = Booking::find($id);
@@ -198,7 +216,7 @@ class BookingController extends Controller
             'tglcekout' => 'required|after:tglcekin',
             'note' => 'nullable|string',
             'nama_agen' => 'nullable',
-            'status' => 'nullable'
+            'status' => 'nullable',
         ]);
 
         // Cari booking yang akan diedit
@@ -219,14 +237,14 @@ class BookingController extends Controller
                 $nomor = 1;
             }
 
-            $kode = 'CUS' . str_pad($nomor, 4, "0", STR_PAD_LEFT);
+            $kode = 'CUS' . str_pad($nomor, 4, '0', STR_PAD_LEFT);
 
             // Simpan customer baru
             $customer = Customer::create([
                 'idcustomer' => $kode,
                 'nama_customer' => $request->nama_customer,
                 'notelp_customer' => $request->notelp_customer,
-                'alamat_customer' => null
+                'alamat_customer' => null,
             ]);
         }
         // Update booking
@@ -270,7 +288,7 @@ class BookingController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Booking berhasil dibatalkan'
+            'message' => 'Booking berhasil dibatalkan',
         ]);
     }
 
@@ -283,7 +301,7 @@ class BookingController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Berhasil Checkin'
+            'message' => 'Berhasil Checkin',
         ]);
     }
 
@@ -296,7 +314,7 @@ class BookingController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Berhasil Checkout'
+            'message' => 'Berhasil Checkout',
         ]);
     }
 }

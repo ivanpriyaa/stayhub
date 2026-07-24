@@ -7,13 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $table = 'booking';
-
     protected $primaryKey = 'idbooking';
-
     public $incrementing = false;
-
     protected $keyType = 'string';
-
     protected $fillable = [
         'idbooking',
         'tglbooking',
@@ -37,5 +33,10 @@ class Booking extends Model
     public function villa()
     {
         return $this->belongsTo(Villa::class, 'idvilla');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'idbooking', 'idbooking');
     }
 }

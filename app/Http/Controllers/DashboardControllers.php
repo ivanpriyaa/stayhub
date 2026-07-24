@@ -52,7 +52,7 @@ class DashboardControllers extends Controller
         //     ];
         // });
 
-        $events = Booking::with('villa', 'customer')->get()->map(function ($b) {
+        $events = Booking::with('villa', 'customer', 'invoices')->get()->map(function ($b) {
             return [
                 'id' => $b->idbooking,
                 'title' => optional($b->villa)->nama_villa . ' - ' . optional($b->customer)->nama_customer,
@@ -62,6 +62,8 @@ class DashboardControllers extends Controller
                 'extendedProps' => [
                     'pic' => $b->pic == 'agen' ? $b->nama_pic : $b->pic,
                     'status' => $b->status,
+                    'note' => $b->note,
+                    'nomor_invoice' => optional($b->invoices->first())->nomor_invoice,
                 ],
                 'color' => '#8A7650'
             ];

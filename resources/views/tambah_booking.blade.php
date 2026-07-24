@@ -105,6 +105,24 @@
                             <input type="text" name="total_harga" id="TotalHarga" class="form-control" required readonly>
                         </div>
 
+                        <div class="mb-3">
+                        <label>Metode Pembayaran</label>
+
+                        <select name="metode_pembayaran" id="metodePembayaran" class="form-select">
+                            <option value="Lunas">Lunas</option>
+                            <option value="DP">DP</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="dpField" style="display:none;">
+                        <label>Nominal DP</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="nominal_dibayar"
+                            min="0">
+                    </div>
+
                         {{-- <div class="mb-3">
                             <label for="pic">PIC</label>
                             <select name="pic" id="pic" class="form-control">
@@ -193,7 +211,14 @@
             if (!harga) {
                 let single = document.getElementById("single-" + villa);
                 if (single) {
-                    harga = single.getAttribute('data-harga');
+                    harga = parseInt(single.getAttribute('data-harga'));
+                    let checkin =
+                        document.getElementById('checkin').value;
+                    let date = new Date(checkin);
+                    let day = date.getDay();
+                    if(day === 0 || day === 6){
+                        harga += 50000;
+                    }
                     document.getElementById('idvillaHidden').value = single.value; // set id villa
                 }
             }
@@ -201,11 +226,31 @@
             document.getElementById('HargaVilla').value = harga || '';
             hitungTotalHarga();
         });
+        // document.querySelectorAll('input[name="idvilla"]').forEach(radio => {
+        //     radio.addEventListener('change', function() {
+        //         let harga = this.getAttribute('data-harga');
+        //         document.getElementById('HargaVilla').value = harga;
+        //         document.getElementById('idvillaHidden').value = this.value; // penting
+        //         hitungTotalHarga();
+        //     });
+        // });
         document.querySelectorAll('input[name="idvilla"]').forEach(radio => {
             radio.addEventListener('change', function() {
-                let harga = this.getAttribute('data-harga');
+                let harga = parseInt(this.getAttribute('data-harga'));
+                let checkin =
+                    document.getElementById('checkin').value;
+                let date = new Date(checkin);
+                let day = date.getDay();
+                // Sabtu / Minggu
+                if(day === 0 || day === 6){
+                    harga += 50000;
+                    // atau:
+                    // harga = harga * 1.5;
+
+                }
                 document.getElementById('HargaVilla').value = harga;
-                document.getElementById('idvillaHidden').value = this.value; // penting
+                document.getElementById('idvillaHidden').value =
+                    this.value;
                 hitungTotalHarga();
             });
         });
@@ -315,6 +360,16 @@
                     $("#namaCustomerBaru").val(ui.item.value);
                 }
             });
+        });
+
+        document.getElementById("metodePembayaran").addEventListener("change", function(){
+
+            if(this.value == "DP"){
+                document.getElementById("dpField").style.display = "block";
+            }else{
+                document.getElementById("dpField").style.display = "none";
+            }
+
         });
     </script>
 

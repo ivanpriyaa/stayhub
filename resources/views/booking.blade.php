@@ -88,7 +88,7 @@
                                         <td style="text-align: center;">
                                             {{-- {{ dd(Auth::user()->role) }} --}}
                                             @auth
-                                                @if (Auth::user()->role === 'admin')
+                                                @if (Auth::user()->role === 'Admin' || Auth::user()->role === 'admin')
                                                     <a href="/booking/edit_booking/{{ $b->idbooking }}"
                                                         class="btn btn-warning btn-sm mb-2">
                                                         <i class="bi bi-pencil"></i>

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardControllers;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\UserController;
@@ -13,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 //     // return view('welcome');
 //     return view('landingpage-home');
 // });
-Route::get('/', [LandingPageController::class, 'landingPage']);
-Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+// Route::get('/', [LandingPageController::class, 'landingPage']);
+Route::get('/', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 // Route::get('/dashboard', function () {
@@ -70,3 +71,8 @@ Route::get('/landingpage-katalogvilla', [LandingPageController::class, 'kataloga
 Route::post('/booking/cancel/{id}', [BookingController::class, 'cancel']);
 Route::post('/booking/checkin/{id}', [BookingController::class, 'checkin']);
 Route::post('/booking/checkout/{id}', [BookingController::class, 'checkout']);
+
+//invoice
+Route::get('/invoice/{nomor_invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+Route::get('/invoice/{nomor_invoice}/print', [InvoiceController::class, 'print'])
+    ->where('nomor_invoice', '.*');

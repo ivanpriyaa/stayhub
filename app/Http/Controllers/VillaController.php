@@ -101,42 +101,54 @@ class VillaController extends Controller
             'alamat_villa' => 'required',
             'gambar_villa.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
-
+    
         $villa = Villa::findOrFail($id);
-
-        // $villa = Villa::find($id);
-
+    
         $villa->update([
             'nama_villa' => $request->nama_villa,
             'harga_villa' => $request->harga_villa,
             'alamat_villa' => $request->alamat_villa
         ]);
-
+    
         if ($request->hasFile('gambar_villa')) {
             $files = $request->file('gambar_villa');
-
+    
             if (!is_array($files)) {
                 $files = [$files];
             }
-
+    
             $isDefaultThumbnail = !$villa->gambar_villa || $villa->gambar_villa === 'villa/default.jpg';
-
+    
             foreach ($files as $index => $file) {
                 $path = $file->store('villa', 'public');
-
+    
+                // sumber file dari storage Laravel
+                $source = storage_path('app/public/' . $path);
+    
+                // tujuan file ke folder domain public
+                $destination = base_path('../1457.on.co.id/storage/' . $path);
+    
+                // buat folder kalau belum ada
+                if (!file_exists(dirname($destination))) {
+                    mkdir(dirname($destination), 0775, true);
+                }
+    
+                // copy file ke public domain
+                copy($source, $destination);
+    
                 if ($isDefaultThumbnail && $index === 0) {
                     $villa->update([
                         'gambar_villa' => $path
                     ]);
                 }
-
+    
                 VillaImage::create([
                     'villa_id' => $villa->idvilla,
                     'gambar' => $path
                 ]);
             }
         }
-
+    
         return redirect('/villa');
     }
 

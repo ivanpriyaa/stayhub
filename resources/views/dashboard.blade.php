@@ -52,9 +52,7 @@
                         <div style="width:110px;height:35px;">
                             <canvas id="revenueChart"></canvas>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -123,6 +121,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <div id="villaCheckboxContainer" class="mt-2"></div>
                             {{-- @endif --}}
                         </div>
                         <h3 id="calendarTitle"></h3>
@@ -143,10 +142,14 @@
                                     <p><b>Checkout :</b> <span id="modalEnd"></span></p>
                                     <p><b>PIC :</b> <span id="modalPic"></span></p>
                                     <p><b>Status :</b> <span id="modalStatus"></span></p>
+                                    <p><b>Note :</b> <span id="modalNote"></span></p>
                                 </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" id="btnInvoice" class="btn btn-warning">
+                                        <i class="bi bi-printer"></i> Print Invoice
+                                    </button>
                                     <button type="button" id="btnClose" class="btn btn-danger d-none"
                                         style="font-weight: 600;">Cancel Booking</button>
                                     <button type="button" id="btnCin" class="btn d-none"
@@ -237,7 +240,7 @@
 
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let allEvents = @json($events ?? []);
 
             // loadHolidays(new Date().getFullYear());
@@ -300,8 +303,8 @@
                 //     weekday: 'long'
                 // },
                 dayHeaderFormat: isMobile ? {
-                        weekday: 'short'
-                    } // Sen, Sel, Rab
+                    weekday: 'short'
+                } // Sen, Sel, Rab
                     :
                     {
                         weekday: 'long'
@@ -315,7 +318,7 @@
                     hour12: false
                 },
 
-                eventContent: function(arg) {
+                eventContent: function (arg) {
                     let title = arg.event.title;
                     let time = arg.timeText;
                     let pic = arg.event.extendedProps.pic || '-';
@@ -346,48 +349,48 @@
                         // ✅ MOBILE (lebih ringkas)
                         return {
                             html: `
-                                <div style="font-size:10px; line-height:1.2">
-                                    <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
-                                    <div>${startTime}-${endTime}</div>
-                                    <div>PIC : ${pic}</div>
-                                    <div>Status : </div>
-                                    <br>
-                                    <div style="display:flex;justify-content:center;align-items:center;">
-                                        <span style="
-                                            background:${getStatusColor(status)};
-                                            color:#fff;
-                                            padding:2px 6px;
-                                            border-radius:6px;
-                                            font-size:8px;
-                                            font-weight:600;
-                                        ">
-                                            ${status}
-                                        </span>
-                                    </div>
-                                </div>
-                            `
+                                            <div style="font-size:10px; line-height:1.2">
+                                                <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
+                                                <div>${startTime}-${endTime}</div>
+                                                <div>PIC : ${pic}</div>
+                                                <div>Status : </div>
+                                                <br>
+                                                <div style="display:flex;justify-content:center;align-items:center;">
+                                                    <span style="
+                                                        background:${getStatusColor(status)};
+                                                        color:#fff;
+                                                        padding:2px 6px;
+                                                        border-radius:6px;
+                                                        font-size:8px;
+                                                        font-weight:600;
+                                                    ">
+                                                        ${status}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        `
                         };
                     } else {
                         // ✅ DESKTOP (full)
                         return {
                             html: `
-                                <div>
-                                    ${title} | ${startTime} - ${endTime} <br>
-                                    <small>
-                                        PIC : ${pic} |
-                                        Status : 
-                                            <span style="
-                                                background:${getStatusColor(status)};
-                                                color:#fff;
-                                                padding:2px 6px;
-                                                border-radius:6px;
-                                                font-size:11px;
-                                                font-weight:600;
-                                            ">${status}
-                                            </span>
-                                    </small>
-                                </div>
-                            `
+                                            <div>
+                                                ${title} | ${startTime} - ${endTime} <br>
+                                                <small>
+                                                    PIC : ${pic} |
+                                                    Status : 
+                                                        <span style="
+                                                            background:${getStatusColor(status)};
+                                                            color:#fff;
+                                                            padding:2px 6px;
+                                                            border-radius:6px;
+                                                            font-size:11px;
+                                                            font-weight:600;
+                                                        ">${status}
+                                                        </span>
+                                                </small>
+                                            </div>
+                                        `
                         };
                     }
 
@@ -396,7 +399,7 @@
                     };
                 },
 
-                eventDidMount: function(info) {
+                eventDidMount: function (info) {
 
                     // pilih warna dari palette berdasarkan judul event
                     let villa = (info.event.extendedProps.villa || info.event.title).toLowerCase();
@@ -416,7 +419,7 @@
                     info.el.style.color = '#ffffff';
                 },
 
-                eventClick: function(info) {
+                eventClick: function (info) {
                     let pic = info.event.extendedProps.pic || "-";
                     let authPIC = "{{ auth()->user()->username }}";
                     let userRole = "{{ auth()->user()->role }}";
@@ -436,12 +439,18 @@
                     document.getElementById("modalStatus").innerText =
                         info.event.extendedProps.status || "-";
 
+                    document.getElementById("modalNote").innerText =
+                        info.event.extendedProps.note || "-";
+
                     let btn = document.getElementById("btnClose");
                     let btncin = document.getElementById("btnCin");
                     let btncout = document.getElementById("btnCout");
+                    let btnInvoice = document.getElementById("btnInvoice");
+
                     btn.dataset.id = info.event.id;
                     btncin.dataset.id = info.event.id;
                     btncout.dataset.id = info.event.id;
+                    btnInvoice.dataset.invoice = info.event.extendedProps.nomor_invoice;
 
                     let picClean = pic.trim().toLowerCase();
                     let authClean = authPIC.trim().toLowerCase();
@@ -453,7 +462,7 @@
                         btn.classList.add("d-none"); // sembunyikan
                     }
 
-                    if (userRole === "admin" || userRole === "super admin") {
+                    if (userRole === "Admin" || userRole === "super admin") {
                         if (statusClean === "terbooking") {
                             btncin.classList.remove("d-none");
                             btn.classList.remove("d-none");
@@ -478,7 +487,7 @@
 
                 },
 
-                dayCellClassNames: function(info) {
+                dayCellClassNames: function (info) {
 
                     let classes = [];
                     // let dateStr = info.date.toISOString().split('T')[0];
@@ -494,7 +503,7 @@
 
                 },
 
-                dayCellDidMount: function(info) {
+                dayCellDidMount: function (info) {
 
                     let today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -518,7 +527,7 @@
                     }
                 },
 
-                dateClick: function(info) {
+                dateClick: function (info) {
                     let today = new Date();
                     today.setHours(0, 0, 0, 0);
                     let tanggal = info.dateStr;
@@ -528,9 +537,8 @@
                         return; // tidak melakukan apa-apa jika tanggal sebelum hari ini
                     }
 
-                    // 🔥 cek filter villa
                     let selectedVilla = document.getElementById("villaFilter").value;
-                    
+
                     if (selectedVilla === "all") {
                         alert("Pilih villa terlebih dahulu sebelum menambah booking!");
                         return;
@@ -544,7 +552,7 @@
                         "&from=calendar";
                 },
 
-                datesSet: function(info) {
+                datesSet: function (info) {
                     document.getElementById("calendarTitle").innerText = info.view.title;
                 }
             });
@@ -553,22 +561,102 @@
 
             calendar.render();
 
-            document.getElementById("villaFilter").addEventListener("change", function() {
+            const allVilla = @json($villae);
 
-                let villa = this.value;
+            function renderVillaCheckbox(villas) {
+
+                let container =
+                    document.getElementById('villaCheckboxContainer');
+
+                container.innerHTML = '';
+
+                villas.forEach(villa => {
+
+                    container.innerHTML += `
+                                    <div class="form-check">
+                                        <input 
+                                            class="form-check-input villa-checkbox"
+                                            type="checkbox"
+                                            value="${villa.nama_villa.toLowerCase()}"
+                                            checked
+                                        >
+
+                                        <label class="form-check-label">
+                                            ${villa.nama_villa}
+                                        </label>
+                                    </div>
+                                `;
+
+                });
+
+                addCheckboxEvent();
+
+            }
+
+            function addCheckboxEvent() {
+
+                document.querySelectorAll('.villa-checkbox')
+                    .forEach(checkbox => {
+
+                        checkbox.addEventListener('change', filterCalendar);
+
+                    });
+
+            }
+
+            function filterCalendar() {
+
+                let checkedVilla = [];
+
+                document.querySelectorAll('.villa-checkbox:checked')
+                    .forEach(item => {
+
+                        checkedVilla.push(item.value);
+
+                    });
 
                 let filtered = allEvents.filter(event => {
 
-                    if (villa === "all") return true;
-
-                    return event.villa && event.villa.toLowerCase() === villa;
+                    return checkedVilla.includes(
+                        event.villa.toLowerCase()
+                    );
 
                 });
 
                 calendar.removeAllEvents();
+
                 calendar.addEventSource(filtered);
 
-            });
+            }
+
+            // pertama kali load
+            renderVillaCheckbox(allVilla);
+
+            document.getElementById("villaFilter")
+                .addEventListener("change", function () {
+
+                    let value = this.value.toLowerCase();
+
+                    // semua villa
+                    if (value === 'all') {
+
+                        renderVillaCheckbox(allVilla);
+
+                        return;
+                    }
+
+                    // filter berdasarkan group
+                    let filteredVilla = allVilla.filter(villa => {
+
+                        return villa.nama_villa
+                            .toLowerCase()
+                            .includes(value);
+
+                    });
+
+                    renderVillaCheckbox(filteredVilla);
+
+                });
 
             let yearNow = new Date().getFullYear();
             loadHolidays(yearNow);
@@ -604,7 +692,7 @@
     Grafik Total Booking
     ==================== --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const ctx = document.getElementById('bookingChart');
 
@@ -653,7 +741,7 @@
     Grafik Total Revenue
     ==================== --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const ctx = document.getElementById('revenueChart');
 
@@ -702,7 +790,7 @@
     Grafik Occupancy Rate
     ==================== --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const ctx = document.getElementById('occupancyChart');
 
@@ -747,7 +835,7 @@
         });
     </script>
     <script>
-        document.getElementById('btnClose').addEventListener('click', function() {
+        document.getElementById('btnClose').addEventListener('click', function () {
 
             const id = this.dataset.id;
 
@@ -759,12 +847,12 @@
             if (!confirm('Yakin ingin cancel booking ini?')) return;
 
             fetch(`/booking/cancel/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                })
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
 
@@ -772,7 +860,6 @@
 
                         alert(data.message);
 
-                        // 🔥 BONUS: langsung update calendar TANPA reload
                         let event = calendar.getEventById(id);
 
                         if (event) {
@@ -796,18 +883,18 @@
         });
     </script>
     <script>
-        document.getElementById('btnCin').addEventListener('click', function() {
+        document.getElementById('btnCin').addEventListener('click', function () {
 
             const id = this.dataset.id;
 
             if (!confirm('Checkin sekarang?')) return;
 
             fetch(`/booking/checkin/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
 
@@ -829,18 +916,18 @@
         });
     </script>
     <script>
-        document.getElementById('btnCout').addEventListener('click', function() {
+        document.getElementById('btnCout').addEventListener('click', function () {
 
             const id = this.dataset.id;
 
             if (!confirm('Checkout sekarang?')) return;
 
             fetch(`/booking/checkout/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
 
@@ -858,6 +945,20 @@
                     }
 
                 });
+
+        });
+    </script>
+    <script>
+        document.getElementById('btnInvoice').addEventListener('click', function () {
+
+            let invoice = this.dataset.invoice;
+
+            if (!invoice) {
+                alert('Invoice tidak ditemukan!');
+                return;
+            }
+
+            window.open('/invoice/' + encodeURIComponent(invoice) + '/print', '_blank');
 
         });
     </script>
