@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    protected $table = 'invoice'; // ubah menjadi 'invoices' jika nama tabel Anda jamak
+    protected $table = 'invoice';
 
     protected $fillable = [
         'idbooking',

@@ -142,14 +142,17 @@
                                     <p><b>Checkout :</b> <span id="modalEnd"></span></p>
                                     <p><b>PIC :</b> <span id="modalPic"></span></p>
                                     <p><b>Status :</b> <span id="modalStatus"></span></p>
+                                    <p><b>Jenis Pembayaran :</b> <span id="modalStatusPembayaran"></span></p>
                                     <p><b>Note :</b> <span id="modalNote"></span></p>
                                 </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" id="btnInvoice" class="btn btn-warning">
-                                        <i class="bi bi-printer"></i> Print Invoice
-                                    </button>
+                                    <button type="button" id="btnInvoice" class="btn btn-warning" style="font-weight: 600;">
+                                        <i class="bi bi-printer"></i> Print Invoice</button>
+                                    <button type="button" id="btnLunas" class="btn d-none"
+                                        style="background-color: #0dfd81;font-weight: 600;" style="font-weight: 600;"><i
+                                            class="bi bi-cash"></i> Pelunasan</button>
                                     <button type="button" id="btnClose" class="btn btn-danger d-none"
                                         style="font-weight: 600;">Cancel Booking</button>
                                     <button type="button" id="btnCin" class="btn d-none"
@@ -323,6 +326,7 @@
                     let time = arg.timeText;
                     let pic = arg.event.extendedProps.pic || '-';
                     let status = arg.event.extendedProps.status || '-';
+                    let status_pembayaran = arg.event.extendedProps.status_pembayaran || '-';
 
 
                     let start = arg.event.start;
@@ -349,48 +353,48 @@
                         // ✅ MOBILE (lebih ringkas)
                         return {
                             html: `
-                                            <div style="font-size:10px; line-height:1.2">
-                                                <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
-                                                <div>${startTime}-${endTime}</div>
-                                                <div>PIC : ${pic}</div>
-                                                <div>Status : </div>
-                                                <br>
-                                                <div style="display:flex;justify-content:center;align-items:center;">
-                                                    <span style="
-                                                        background:${getStatusColor(status)};
-                                                        color:#fff;
-                                                        padding:2px 6px;
-                                                        border-radius:6px;
-                                                        font-size:8px;
-                                                        font-weight:600;
-                                                    ">
-                                                        ${status}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        `
+                                                                    <div style="font-size:10px; line-height:1.2">
+                                                                        <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
+                                                                        <div>${startTime}-${endTime}</div>
+                                                                        <div>PIC : ${pic}</div>
+                                                                        <div>Status : </div>
+                                                                        <br>
+                                                                        <div style="display:flex;justify-content:center;align-items:center;">
+                                                                            <span style="
+                                                                                background:${getStatusColor(status)};
+                                                                                color:#fff;
+                                                                                padding:2px 6px;
+                                                                                border-radius:6px;
+                                                                                font-size:8px;
+                                                                                font-weight:600;
+                                                                            ">
+                                                                                ${status}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                `
                         };
                     } else {
                         // ✅ DESKTOP (full)
                         return {
                             html: `
-                                            <div>
-                                                ${title} | ${startTime} - ${endTime} <br>
-                                                <small>
-                                                    PIC : ${pic} |
-                                                    Status : 
-                                                        <span style="
-                                                            background:${getStatusColor(status)};
-                                                            color:#fff;
-                                                            padding:2px 6px;
-                                                            border-radius:6px;
-                                                            font-size:11px;
-                                                            font-weight:600;
-                                                        ">${status}
-                                                        </span>
-                                                </small>
-                                            </div>
-                                        `
+                                                                    <div>
+                                                                        ${title} | ${startTime} - ${endTime} <br>
+                                                                        <small>
+                                                                            PIC : ${pic} |
+                                                                            Status : 
+                                                                                <span style="
+                                                                                    background:${getStatusColor(status)};
+                                                                                    color:#fff;
+                                                                                    padding:2px 6px;
+                                                                                    border-radius:6px;
+                                                                                    font-size:11px;
+                                                                                    font-weight:600;
+                                                                                ">${status}
+                                                                                </span>
+                                                                        </small>
+                                                                    </div>
+                                                                `
                         };
                     }
 
@@ -423,34 +427,28 @@
                     let pic = info.event.extendedProps.pic || "-";
                     let authPIC = "{{ auth()->user()->username }}";
                     let userRole = "{{ auth()->user()->role }}";
-                    let status = info.event.extendedProps.status || "";
+                    let status = info.event.extendedProps.status || "-";
+                    let status_pembayaran = info.event.extendedProps.status_pembayaran || "-";
 
                     document.getElementById("modalVilla").innerText = info.event.title;
-
-                    document.getElementById("modalStart").innerText =
-                        info.event.start.toLocaleString();
-
-                    document.getElementById("modalEnd").innerText =
-                        info.event.end ? info.event.end.toLocaleString() : "-";
-
-                    document.getElementById("modalPic").innerText =
-                        info.event.extendedProps.pic || "-";
-
-                    document.getElementById("modalStatus").innerText =
-                        info.event.extendedProps.status || "-";
-
-                    document.getElementById("modalNote").innerText =
-                        info.event.extendedProps.note || "-";
+                    document.getElementById("modalStart").innerText = info.event.start.toLocaleString();
+                    document.getElementById("modalEnd").innerText = info.event.end ? info.event.end.toLocaleString() : "-";
+                    document.getElementById("modalPic").innerText = info.event.extendedProps.pic || "-";
+                    document.getElementById("modalStatus").innerText = info.event.extendedProps.status || "-";
+                    document.getElementById("modalStatusPembayaran").innerText = info.event.extendedProps.status_pembayaran || "-";
+                    document.getElementById("modalNote").innerText = info.event.extendedProps.note || "-";
 
                     let btn = document.getElementById("btnClose");
                     let btncin = document.getElementById("btnCin");
                     let btncout = document.getElementById("btnCout");
                     let btnInvoice = document.getElementById("btnInvoice");
+                    let btnLunas = document.getElementById("btnLunas");
 
                     btn.dataset.id = info.event.id;
                     btncin.dataset.id = info.event.id;
                     btncout.dataset.id = info.event.id;
-                    btnInvoice.dataset.invoice = info.event.extendedProps.nomor_invoice;
+                    btnInvoice.dataset.id = info.event.id;
+                    btnLunas.dataset.id = info.event.id;
 
                     let picClean = pic.trim().toLowerCase();
                     let authClean = authPIC.trim().toLowerCase();
@@ -464,9 +462,15 @@
 
                     if (userRole === "Admin" || userRole === "super admin") {
                         if (statusClean === "terbooking") {
-                            btncin.classList.remove("d-none");
                             btn.classList.remove("d-none");
                             btncout.classList.add("d-none");
+                            if (status_pembayaran === "DP") {
+                                btncin.classList.add("d-none");
+                                btnLunas.classList.remove("d-none");
+                            } else {
+                                btnLunas.classList.add("d-none");
+                                btncin.classList.remove("d-none");
+                            }
                         }
 
                         if (statusClean === "checkin") {
@@ -573,19 +577,19 @@
                 villas.forEach(villa => {
 
                     container.innerHTML += `
-                                    <div class="form-check">
-                                        <input 
-                                            class="form-check-input villa-checkbox"
-                                            type="checkbox"
-                                            value="${villa.nama_villa.toLowerCase()}"
-                                            checked
-                                        >
+                                                            <div class="form-check">
+                                                                <input 
+                                                                    class="form-check-input villa-checkbox"
+                                                                    type="checkbox"
+                                                                    value="${villa.nama_villa.toLowerCase()}"
+                                                                    checked
+                                                                >
 
-                                        <label class="form-check-label">
-                                            ${villa.nama_villa}
-                                        </label>
-                                    </div>
-                                `;
+                                                                <label class="form-check-label">
+                                                                    ${villa.nama_villa}
+                                                                </label>
+                                                            </div>
+                                                        `;
 
                 });
 
@@ -884,11 +888,8 @@
     </script>
     <script>
         document.getElementById('btnCin').addEventListener('click', function () {
-
             const id = this.dataset.id;
-
             if (!confirm('Checkin sekarang?')) return;
-
             fetch(`/booking/checkin/${id}`, {
                 method: 'POST',
                 headers: {
@@ -897,22 +898,15 @@
             })
                 .then(res => res.json())
                 .then(data => {
-
                     if (data.success) {
-
                         alert(data.message);
-
                         let event = calendar.getEventById(id);
-
                         if (event) {
                             event.setExtendedProp('status', 'Checkin');
                         }
-
                         bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
                     }
-
                 });
-
         });
     </script>
     <script>
@@ -951,14 +945,67 @@
     <script>
         document.getElementById('btnInvoice').addEventListener('click', function () {
 
-            let invoice = this.dataset.invoice;
+            let id = this.dataset.id;
 
-            if (!invoice) {
+            if (!id) {
                 alert('Invoice tidak ditemukan!');
                 return;
             }
 
-            window.open('/invoice/' + encodeURIComponent(invoice) + '/print', '_blank');
+            // window.open('/invoice/' + encodeURIComponent(invoice) + '/print', '_blank');
+            // const id = this.dataset.id;
+            window.open('/invoice/' + id + '/print', '_blank');
+
+        });
+    </script>
+    <script>
+        document.getElementById('btnLunas').addEventListener('click', function () {
+
+            const id = this.dataset.id;
+
+            if (!id) {
+                alert("ID booking tidak ditemukan");
+                return;
+            }
+
+            if (!confirm('Pelunasan sekarang?')) return;
+
+            fetch(`/booking/pelunasan/${id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    console.log("Response :", data);
+
+                    if (!data.success) return;
+
+                    let event = calendar.getEventById(id);
+
+                    console.log("ID :", id);
+                    console.log("Event :", event);
+
+                    if (event) {
+                        event.setExtendedProp('status_pembayaran', 'Lunas');
+                    }
+
+                    document.getElementById("modalStatusPembayaran").innerText = "Lunas";
+
+                    const btnLunas = document.getElementById("btnLunas");
+                    if (btnLunas) btnLunas.classList.add("d-none");
+
+                    const btnCin = document.getElementById("btnCin");
+                    if (btnCin) btnCin.classList.remove("d-none");
+
+                    alert(data.message);
+
+                })
+                .catch(err => {
+                    console.error(err);
+                });
 
         });
     </script>

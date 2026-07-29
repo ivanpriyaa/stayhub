@@ -153,7 +153,11 @@ class BookingController extends Controller
 
             return back()->with('error', 'Villa ' . $villa->nama_villa . ' terisi pada tanggal dan jam tersebut!');
         } else {
-
+            if ($request->metode_pembayaran == 'Lunas') {
+                $total_bayar = $total_harga;
+            } else {
+                $total_bayar = $request->nominal_dibayar;
+            }
             // Simpan booking
             $booking = Booking::create([
                 'idbooking' => $code,
@@ -168,21 +172,36 @@ class BookingController extends Controller
                 'nama_agen' => $request->nama_agen,
                 'note' => $request->note ?? '',
                 'status' => $request->status ?? 'Booking',
+                'total_bayar' => $total_bayar,
+                'status_pembayaran' => $request->metode_pembayaran,
+                'nominal_dibayar' => 'required_if:metode_pembayaran,DP|nullable|numeric|min:1',
             ]);
 
             $lastInvoice = Invoice::latest()->first();
-            $nomor = $lastInvoice ? $lastInvoice->id + 1 : 1;
+
+            $nomor = $lastInvoice
+                ? ((int) last(explode('/', $lastInvoice->nomor_invoice))) + 1
+                : 1;
+
             $invoiceNumber = 'INV/' .
                 date('Ymd') .
                 '/' .
                 str_pad($nomor, 5, '0', STR_PAD_LEFT);
 
+            if ($request->metode_pembayaran == 'Lunas') {
+                $nominal = $total_harga;
+                $statusInvoice = 'Paid';
+            } else {
+                $nominal = preg_replace('/[^0-9]/', '', $request->nominal_dibayar);
+                $statusInvoice = 'Partial';
+            }
+
             Invoice::create([
                 'idbooking' => $booking->idbooking,
                 'nomor_invoice' => $invoiceNumber,
                 'jenis' => $request->metode_pembayaran,
-                'nominal' => $request->nominal_dibayar,
-                'status' => 'Paid',
+                'nominal' => $nominal,
+                'status' => $statusInvoice,
             ]);
 
             if ($request->from == 'calendar') {
@@ -315,6 +334,54 @@ class BookingController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Berhasil Checkout',
+        ]);
+    }
+
+    public function pelunasan($id)
+    {
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        // Sudah lunas
+        if ($booking->status_pembayaran == 'Lunas') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking sudah lunas.'
+            ], 400);
+        }
+
+        // Hitung sisa pembayaran sebelum update
+        $sisaBayar = $booking->total_harga - $booking->total_bayar;
+
+        // Update booking
+        $booking->update([
+            'status_pembayaran' => 'Lunas',
+            'total_bayar' => $booking->total_harga,
+        ]);
+
+        // Nomor invoice baru
+        $lastInvoice = Invoice::latest()->first();
+
+        $nomor = $lastInvoice
+            ? ((int) last(explode('/', $lastInvoice->nomor_invoice))) + 1
+            : 1;
+
+        $nomorInvoice = 'INV/' .
+            date('Ymd') .
+            '/' .
+            str_pad($nomor, 5, '0', STR_PAD_LEFT);
+
+        // Simpan invoice pelunasan
+        Invoice::create([
+            'idbooking' => $booking->idbooking,
+            'nomor_invoice' => $nomorInvoice,
+            'jenis' => 'Pelunasan',
+            'nominal' => $sisaBayar,
+            'status' => 'Paid',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pelunasan berhasil.'
         ]);
     }
 }

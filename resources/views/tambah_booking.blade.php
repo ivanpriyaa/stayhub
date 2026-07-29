@@ -362,12 +362,16 @@
             });
         });
 
-        document.getElementById("metodePembayaran").addEventListener("change", function(){
+        document.getElementById("metodePembayaran").addEventListener("change", function () {
 
-            if(this.value == "DP"){
-                document.getElementById("dpField").style.display = "block";
-            }else{
-                document.getElementById("dpField").style.display = "none";
+            const dpField = document.getElementById("dpField");
+            const nominal = document.querySelector('input[name="nominal_dibayar"]');
+
+            if (this.value === "DP") {
+                dpField.style.display = "block";
+            } else {
+                dpField.style.display = "none";
+                nominal.value = "";
             }
 
         });

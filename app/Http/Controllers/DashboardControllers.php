@@ -63,6 +63,7 @@ class DashboardControllers extends Controller
                     'pic' => $b->pic == 'agen' ? $b->nama_pic : $b->pic,
                     'status' => $b->status,
                     'note' => $b->note,
+                    'status_pembayaran' => $b->status_pembayaran,
                     'nomor_invoice' => optional($b->invoices->first())->nomor_invoice,
                 ],
                 'color' => '#8A7650'

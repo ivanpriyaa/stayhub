@@ -50,11 +50,11 @@
                         </a>
                     </li>
                     <hr>
-                    <li class="nav-item mb-1">
+                    {{-- <li class="nav-item mb-1">
                         <a href="{{ url('/availability') }}"
                             class="nav-link inria-sans-regular {{ request()->is('availability*') ? 'active' : '' }}"><i
                                 class="bi bi-calendar-week"></i></span> Villa Availability</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item mb-1">
                         <a href="{{ url('/booking') }}"
                             class="nav-link inria-sans-regular {{ request()->is('booking*') ? 'active' : '' }}"><i
@@ -68,11 +68,11 @@
                         </a>
                     </li>
                     <hr>
-                    <li class="nav-item mb-1">
+                    {{-- <li class="nav-item mb-1">
                         <a href="{{ url('/availability') }}"
                             class="nav-link inria-sans-regular {{ request()->is('availability*') ? 'active' : '' }}"><i
                                 class="bi bi-calendar-week"></i></span> Villa Availability</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item mb-1">
                         <a href="{{ url('/booking') }}"
                             class="nav-link inria-sans-regular {{ request()->is('booking*') ? 'active' : '' }}"><i

@@ -71,8 +71,9 @@ Route::get('/landingpage-katalogvilla', [LandingPageController::class, 'kataloga
 Route::post('/booking/cancel/{id}', [BookingController::class, 'cancel']);
 Route::post('/booking/checkin/{id}', [BookingController::class, 'checkin']);
 Route::post('/booking/checkout/{id}', [BookingController::class, 'checkout']);
+Route::post('/booking/pelunasan/{id}', [BookingController::class, 'pelunasan'])
+    ->name('booking.pelunasan');
 
 //invoice
-Route::get('/invoice/{nomor_invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
 Route::get('/invoice/{nomor_invoice}/print', [InvoiceController::class, 'print'])
     ->where('nomor_invoice', '.*');

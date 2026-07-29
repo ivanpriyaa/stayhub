@@ -172,24 +172,37 @@
                     Rp {{ number_format($invoice->booking->total_harga, 0, ',', '.') }}
                 </td>
             </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <b>Dibayar</b>
-                </td>
-                <td class="text-end">
-                    Rp {{ number_format($invoice->nominal, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <b>Sisa</b>
-                </td>
-                <td class="text-end">
-                    Rp {{ number_format($invoice->booking->total_harga - $invoice->nominal, 0, ',', '.') }}
-                </td>
-            </tr>
+            @if(strtolower($invoice->jenis) == 'dp')
+                <tr>
+                    <td></td>
+                    <td><b>DP Dibayar</b></td>
+                    <td class="text-end">
+                        Rp {{ number_format($invoice->nominal, 0, ',', '.') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Sisa Pembayaran</b></td>
+                    <td class="text-end">
+                        Rp {{ number_format($invoice->booking->total_harga - $invoice->nominal, 0, ',', '.') }}
+                    </td>
+                </tr>
+            @else
+                <tr>
+                    <td></td>
+                    <td><b>Total Dibayar</b></td>
+                    <td class="text-end">
+                        Rp {{ number_format($invoice->booking->total_harga, 0, ',', '.') }}
+                    </td>
+                </tr>
+                {{-- <tr>
+                    <td></td>
+                    <td><b>Sisa Pembayaran</b></td>
+                    <td class="text-end">
+                        Rp 0
+                    </td>
+                </tr> --}}
+            @endif
         </table>
         <br>
         <div class="footer">
