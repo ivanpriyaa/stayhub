@@ -9,19 +9,12 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        body {
-            background: #eee;
-            margin: 30px;
-        }
-
         .invoice {
-
-            width: 900px;
-            margin: auto;
-            background: #fff;
-            padding: 40px;
-            border-radius: 10px;
-
+            width: 190mm;
+            margin: 0 auto;
+            background: white;
+            padding: 10mm;
+            box-sizing: border-box;
         }
 
         .header {
@@ -102,7 +95,7 @@
 </head>
 
 <body>
-    <div class="invoice">
+    <div class="invoice" id="invoice">
         <div class="header">
             <div>
                 <img src="{{ asset('images/logo-stayhub.png') }}" class="logo">
@@ -153,68 +146,111 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Booking Villa</td>
-                    <td>{{ $invoice->jenis }}</td>
-                    <td class="text-end">
-                        Rp {{ number_format($invoice->nominal, 0, ',', '.') }}
-                    </td>
-                </tr>
+                @foreach($invoices as $item)
+                    <tr>
+                        <td>Pembayaran Booking Villa</td>
+                        <td>{{ $item->jenis }}</td>
+                        <td class="text-end">
+                            Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
+        @php
+            $totalBooking = $invoice->booking->total_harga;
+            $totalDibayar = $invoices->sum('nominal');
+            $sisaPembayaran = $totalBooking - $totalDibayar;
+
+            $dp = $invoices->first(function ($item) {
+                return strtolower($item->jenis) == 'dp';
+            });
+
+            $pelunasan = $invoices->first(function ($item) {
+                return strtolower($item->jenis) == 'pelunasan';
+            });
+        @endphp
         <table>
             <tr>
-                <td width="70%"></td>
-                <td>
-                    <b>Total Booking</b>
-                </td>
+                <td width="50%"></td>
+                <td><b>Total Booking</b></td>
                 <td class="text-end">
-                    Rp {{ number_format($invoice->booking->total_harga, 0, ',', '.') }}
+                    Rp {{ number_format($totalBooking, 0, ',', '.') }}
                 </td>
             </tr>
-            @if(strtolower($invoice->jenis) == 'dp')
+
+            @if($dp)
                 <tr>
                     <td></td>
                     <td><b>DP Dibayar</b></td>
                     <td class="text-end">
-                        Rp {{ number_format($invoice->nominal, 0, ',', '.') }}
+                        Rp {{ number_format($dp->nominal, 0, ',', '.') }}
                     </td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Sisa Pembayaran</b></td>
-                    <td class="text-end">
-                        Rp {{ number_format($invoice->booking->total_harga - $invoice->nominal, 0, ',', '.') }}
-                    </td>
-                </tr>
-            @else
-                <tr>
-                    <td></td>
-                    <td><b>Total Dibayar</b></td>
-                    <td class="text-end">
-                        Rp {{ number_format($invoice->booking->total_harga, 0, ',', '.') }}
-                    </td>
-                </tr>
-                {{-- <tr>
-                    <td></td>
-                    <td><b>Sisa Pembayaran</b></td>
-                    <td class="text-end">
-                        Rp 0
-                    </td>
-                </tr> --}}
             @endif
+
+            @if($pelunasan)
+                <tr>
+                    <td></td>
+                    <td><b>Pelunasan</b></td>
+                    <td class="text-end">
+                        Rp {{ number_format($pelunasan->nominal, 0, ',', '.') }}
+                    </td>
+                </tr>
+            @endif
+
+            <tr>
+                <td></td>
+                <td><b>Total Dibayar</b></td>
+                <td class="text-end">
+                    Rp {{ number_format($totalDibayar, 0, ',', '.') }}
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><b>Sisa Pembayaran</b></td>
+                <td class="text-end">
+                    Rp {{ number_format($sisaPembayaran, 0, ',', '.') }}
+                </td>
+            </tr>
         </table>
         <br>
         <div class="footer">
             Terima kasih telah memilih <b>StayHub</b>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        window.onload = function () {
+
+            const element = document.getElementById('invoice');
+
+            const opt = {
+                margin: 10,
+                filename: 'Invoice-{{ $invoice->nomor_invoice }}.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 1
+                },
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf()
+                .set(opt)
+                .from(element)
+                .save();
+
+        };
+    </script>
 </body>
 
 </html>
-
-<script>
-    window.onload = function () {
-        window.print();
-    }
-</script>
