@@ -102,7 +102,7 @@
 
                         <div class="mb-3">
                             <label>Total Harga</label>
-                            <input type="text" name="total_harga" id="TotalHarga" class="form-control" required readonly>
+                            <input type="text" name="total_harga" id="TotalHarga" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
