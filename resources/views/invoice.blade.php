@@ -21,14 +21,13 @@
 
             display: flex;
             justify-content: space-between;
-            border-bottom: 3px solid #213248;
+            border-bottom: 3px solid #000;
             padding-bottom: 20px;
-
         }
 
         h1 {
 
-            color: #213248;
+            color: #000;
             margin: 0;
 
         }
@@ -43,7 +42,7 @@
 
         table th {
 
-            background: #213248 !important;
+            background: #000 !important;
             color: white !important;
             padding: 10px;
             -webkit-print-color-adjust: exact;
@@ -88,8 +87,30 @@
         }
 
         .logo {
+            display: block;
+        }
+
+        .logo-billypio {
             width: 150px;
-            height: 100px;
+        }
+
+        .logo-qwhite {
+            width: 130px;
+            margin-top: 5px;
+        }
+
+        .logo-skymanor {
+            width: 170px;
+            margin-top: 10px;
+        }
+
+        .logo-valley {
+            width: 170px;
+            margin-top: 10px;
+        }
+
+        .logo-default {
+            width: 150px;
         }
     </style>
 </head>
@@ -98,7 +119,35 @@
     <div class="invoice" id="invoice">
         <div class="header">
             <div>
-                <img src="{{ asset('images/logo-stayhub.png') }}" class="logo">
+                @php
+                    $villas = [
+                        'BillyPio Homestay' => [
+                            'logo' => 'logo-medan.png',
+                            'class' => 'logo-billypio',
+                        ],
+                        'Qwhite House' => [
+                            'logo' => 'logo-sby.png',
+                            'class' => 'logo-qwhite',
+                        ],
+                        'Bromo Sky Manor' => [
+                            'logo' => 'logo-bromo.jpeg',
+                            'class' => 'logo-skymanor',
+                        ],
+                        'Bromo Valley Lodge' => [
+                            'logo' => 'logo-bromo.jpeg',
+                            'class' => 'logo-valley',
+                        ],
+                    ];
+
+                    $namaVilla = $invoice->booking->villa->nama_villa;
+
+                    $data = $villas[$namaVilla] ?? [
+                        'logo' => 'default.png',
+                        'class' => 'logo-default',
+                    ];
+                @endphp
+
+                <img src="{{ asset('images/' . $data['logo']) }}" class="logo {{ $data['class'] }}" alt="Logo">
             </div>
             <div>
                 <h2>INVOICE</h2>
@@ -217,7 +266,7 @@
         </table>
         <br>
         <div class="footer">
-            Terima kasih telah memilih <b>StayHub</b>
+            Terima kasih telah memilih <b>{{ optional($invoice->booking->villa)->nama_villa ?? 'StayHub' }}</b>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
