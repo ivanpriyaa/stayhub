@@ -150,6 +150,9 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" id="btnInvoice" class="btn btn-warning" style="font-weight: 600;">
                                         <i class="bi bi-printer"></i> Print Invoice</button>
+                                    <button type="button" id="btnTambahHari" class="btn btn-success">
+                                        <i class="bi bi-calendar-plus"></i> Tambah Hari
+                                    </button>
                                     <button type="button" id="btnLunas" class="btn d-none"
                                         style="background-color: #0dfd81;font-weight: 600;" style="font-weight: 600;"><i
                                             class="bi bi-cash"></i> Pelunasan</button>
@@ -166,6 +169,94 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="tambahHariModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-calendar-plus"></i>
+                        Tambah Hari Sewa
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        <b>Villa :</b>
+                        <span id="tambahVilla"></span>
+                    </p>
+
+                    <p>
+                        <b>Customer :</b>
+                        <span id="tambahCustomer"></span>
+                    </p>
+
+                    <p>
+                        <b>Check-Out Sekarang :</b>
+                        <span id="tambahCheckoutLama"></span>
+                    </p>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Tambah Berapa Hari?
+                        </label>
+
+                        <input type="number" id="jumlahTambahHari" class="form-control" min="1" max="30" value="1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Check-Out Baru
+                        </label>
+
+                        <input type="text" id="tambahCheckoutBaru" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Harga Per Hari
+                        </label>
+
+                        <input type="text" id="tambahHargaHari" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Tambahan Harga
+                        </label>
+
+                        <input type="text" id="tambahHargaTambahan" class="form-control" readonly>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Total Harga Baru:</strong>
+                        <span id="tambahTotalBaru"></span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button type="button" id="btnSimpanTambahHari" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i>
+                        Simpan
+                    </button>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -353,48 +444,48 @@
                         // ✅ MOBILE (lebih ringkas)
                         return {
                             html: `
-                                                                    <div style="font-size:10px; line-height:1.2">
-                                                                        <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
-                                                                        <div>${startTime}-${endTime}</div>
-                                                                        <div>PIC : ${pic}</div>
-                                                                        <div>Status : </div>
-                                                                        <br>
-                                                                        <div style="display:flex;justify-content:center;align-items:center;">
-                                                                            <span style="
-                                                                                background:${getStatusColor(status)};
-                                                                                color:#fff;
-                                                                                padding:2px 6px;
-                                                                                border-radius:6px;
-                                                                                font-size:8px;
-                                                                                font-weight:600;
-                                                                            ">
-                                                                                ${status}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                `
+                                                                                    <div style="font-size:10px; line-height:1.2">
+                                                                                        <div style="font-weight:700;white-space: normal; word-break: break-word;">${title}</div>
+                                                                                        <div>${startTime}-${endTime}</div>
+                                                                                        <div>PIC : ${pic}</div>
+                                                                                        <div>Status : </div>
+                                                                                        <br>
+                                                                                        <div style="display:flex;justify-content:center;align-items:center;">
+                                                                                            <span style="
+                                                                                                background:${getStatusColor(status)};
+                                                                                                color:#fff;
+                                                                                                padding:2px 6px;
+                                                                                                border-radius:6px;
+                                                                                                font-size:8px;
+                                                                                                font-weight:600;
+                                                                                            ">
+                                                                                                ${status}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                `
                         };
                     } else {
                         // ✅ DESKTOP (full)
                         return {
                             html: `
-                                                                    <div>
-                                                                        ${title} | ${startTime} - ${endTime} <br>
-                                                                        <small>
-                                                                            PIC : ${pic} |
-                                                                            Status : 
-                                                                                <span style="
-                                                                                    background:${getStatusColor(status)};
-                                                                                    color:#fff;
-                                                                                    padding:2px 6px;
-                                                                                    border-radius:6px;
-                                                                                    font-size:11px;
-                                                                                    font-weight:600;
-                                                                                ">${status}
-                                                                                </span>
-                                                                        </small>
-                                                                    </div>
-                                                                `
+                                                                                    <div>
+                                                                                        ${title} | ${startTime} - ${endTime} <br>
+                                                                                        <small>
+                                                                                            PIC : ${pic} |
+                                                                                            Status : 
+                                                                                                <span style="
+                                                                                                    background:${getStatusColor(status)};
+                                                                                                    color:#fff;
+                                                                                                    padding:2px 6px;
+                                                                                                    border-radius:6px;
+                                                                                                    font-size:11px;
+                                                                                                    font-weight:600;
+                                                                                                ">${status}
+                                                                                                </span>
+                                                                                        </small>
+                                                                                    </div>
+                                                                                `
                         };
                     }
 
@@ -443,12 +534,14 @@
                     let btncout = document.getElementById("btnCout");
                     let btnInvoice = document.getElementById("btnInvoice");
                     let btnLunas = document.getElementById("btnLunas");
+                    let btnTambahHari = document.getElementById("btnTambahHari");
 
                     btn.dataset.id = info.event.id;
                     btncin.dataset.id = info.event.id;
                     btncout.dataset.id = info.event.id;
                     btnInvoice.dataset.id = info.event.id;
                     btnLunas.dataset.id = info.event.id;
+                    btnTambahHari.dataset.id = info.event.id;
 
                     let picClean = pic.trim().toLowerCase();
                     let authClean = authPIC.trim().toLowerCase();
@@ -577,19 +670,19 @@
                 villas.forEach(villa => {
 
                     container.innerHTML += `
-                                                            <div class="form-check">
-                                                                <input 
-                                                                    class="form-check-input villa-checkbox"
-                                                                    type="checkbox"
-                                                                    value="${villa.nama_villa.toLowerCase()}"
-                                                                    checked
-                                                                >
+                                                                            <div class="form-check">
+                                                                                <input 
+                                                                                    class="form-check-input villa-checkbox"
+                                                                                    type="checkbox"
+                                                                                    value="${villa.nama_villa.toLowerCase()}"
+                                                                                    checked
+                                                                                >
 
-                                                                <label class="form-check-label">
-                                                                    ${villa.nama_villa}
-                                                                </label>
-                                                            </div>
-                                                        `;
+                                                                                <label class="form-check-label">
+                                                                                    ${villa.nama_villa}
+                                                                                </label>
+                                                                            </div>
+                                                                        `;
 
                 });
 
@@ -1008,5 +1101,351 @@
                 });
 
         });
+    </script>
+    <script>
+        let selectedBooking = null;
+
+        document.getElementById('btnTambahHari').addEventListener('click', function () {
+
+            const id = this.dataset.id;
+
+            if (!id) {
+                alert('ID booking tidak ditemukan');
+                return;
+            }
+
+            const event = calendar.getEventById(id);
+
+            if (!event) {
+                alert('Data booking tidak ditemukan');
+                return;
+            }
+
+            selectedBooking = event;
+
+            const props = event.extendedProps;
+
+            const checkin = new Date(event.start);
+            const checkout = new Date(event.end);
+
+            // Hitung jumlah hari lama
+            const diffTime = checkout - checkin;
+
+            const hariLama = Math.ceil(
+                diffTime / (1000 * 60 * 60 * 24)
+            );
+
+            if (hariLama <= 0) {
+                alert('Tanggal booking tidak valid');
+                return;
+            }
+
+            const totalHarga = Number(props.total_harga || 0);
+
+            const hargaPerHari = totalHarga / hariLama;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Isi modal
+            |--------------------------------------------------------------------------
+            */
+
+            document.getElementById('tambahVilla').innerText =
+                event.title;
+
+            document.getElementById('tambahCustomer').innerText =
+                props.customer || '-';
+
+            document.getElementById('tambahCheckoutLama').innerText =
+                formatTanggal(checkout);
+
+            document.getElementById('jumlahTambahHari').value = 1;
+
+            document.getElementById('tambahHargaHari').value =
+                formatRupiah(hargaPerHari);
+
+            updateTambahHari();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Tutup modal detail
+            |--------------------------------------------------------------------------
+            */
+
+            const detailModal =
+                bootstrap.Modal.getInstance(
+                    document.getElementById('eventModal')
+                );
+
+            if (detailModal) {
+                detailModal.hide();
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Buka modal tambah hari
+            |--------------------------------------------------------------------------
+            */
+
+            const tambahModal =
+                new bootstrap.Modal(
+                    document.getElementById('tambahHariModal')
+                );
+
+            tambahModal.show();
+        });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Ketika jumlah hari berubah
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('jumlahTambahHari')
+            .addEventListener('input', updateTambahHari);
+
+
+        function updateTambahHari() {
+
+            if (!selectedBooking) {
+                return;
+            }
+
+            const jumlahHari =
+                parseInt(
+                    document.getElementById('jumlahTambahHari').value
+                ) || 1;
+
+            const checkoutLama =
+                new Date(selectedBooking.end);
+
+            const checkin =
+                new Date(selectedBooking.start);
+
+            const totalHarga =
+                Number(
+                    selectedBooking.extendedProps.total_harga || 0
+                );
+
+            const hariLama =
+                Math.ceil(
+                    (checkoutLama - checkin) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            if (hariLama <= 0) {
+                return;
+            }
+
+            const hargaPerHari =
+                totalHarga / hariLama;
+
+            const hargaTambahan =
+                hargaPerHari * jumlahHari;
+
+            const checkoutBaru =
+                new Date(checkoutLama);
+
+            checkoutBaru.setDate(
+                checkoutBaru.getDate() + jumlahHari
+            );
+
+            const totalBaru =
+                totalHarga + hargaTambahan;
+
+
+            document.getElementById('tambahCheckoutBaru')
+                .value = formatTanggal(checkoutBaru);
+
+            document.getElementById('tambahHargaHari')
+                .value = formatRupiah(hargaPerHari);
+
+            document.getElementById('tambahHargaTambahan')
+                .value = formatRupiah(hargaTambahan);
+
+            document.getElementById('tambahTotalBaru')
+                .innerText = formatRupiah(totalBaru);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Simpan Tambah Hari
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('btnSimpanTambahHari')
+            .addEventListener('click', function () {
+
+                if (!selectedBooking) {
+                    alert('Booking belum dipilih');
+                    return;
+                }
+
+                const id =
+                    selectedBooking.id;
+
+                const jumlahHari =
+                    parseInt(
+                        document.getElementById('jumlahTambahHari').value
+                    );
+
+                if (!jumlahHari || jumlahHari < 1) {
+                    alert('Jumlah hari tidak valid');
+                    return;
+                }
+
+                if (!confirm(
+                    `Yakin ingin menambah ${jumlahHari} hari?`
+                )) {
+                    return;
+                }
+
+                fetch(`/booking/tambah-hari/${id}`, {
+
+                    method: 'POST',
+
+                    headers: {
+                        'X-CSRF-TOKEN':
+                            document.querySelector(
+                                'meta[name="csrf-token"]'
+                            ).content,
+
+                        'Content-Type':
+                            'application/json',
+
+                        'Accept':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        jumlah_hari: jumlahHari
+                    })
+
+                })
+                    .then(res => res.json())
+
+                    .then(data => {
+
+                        if (!data.success) {
+                            alert(
+                                data.message ||
+                                'Gagal menambahkan hari'
+                            );
+
+                            return;
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Update event kalender
+                        |--------------------------------------------------------------------------
+                        */
+
+                        const event =
+                            calendar.getEventById(id);
+
+                        if (event) {
+
+                            event.setEnd(
+                                new Date(
+                                    data.data.tglcekout_baru
+                                )
+                            );
+
+                            event.setExtendedProp(
+                                'tglcekout',
+                                data.data.tglcekout_baru
+                            );
+
+                            event.setExtendedProp(
+                                'total_harga',
+                                data.data.total_harga_baru
+                            );
+
+                            event.setExtendedProp(
+                                'total_bayar',
+                                data.data.total_bayar
+                            );
+
+                            event.setExtendedProp(
+                                'status_pembayaran',
+                                data.data.status_pembayaran
+                            );
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Tutup modal
+                        |--------------------------------------------------------------------------
+                        */
+
+                        const modal =
+                            bootstrap.Modal.getInstance(
+                                document.getElementById(
+                                    'tambahHariModal'
+                                )
+                            );
+
+                        if (modal) {
+                            modal.hide();
+                        }
+
+                        alert(data.message);
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Reset
+                        |--------------------------------------------------------------------------
+                        */
+
+                        selectedBooking = null;
+
+                    })
+
+                    .catch(error => {
+
+                        console.error(error);
+
+                        alert(
+                            'Terjadi kesalahan saat menambahkan hari.'
+                        );
+
+                    });
+
+            });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Format Rupiah
+        |--------------------------------------------------------------------------
+        */
+
+        function formatRupiah(value) {
+
+            return 'Rp ' + Number(value || 0)
+                .toLocaleString('id-ID');
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Format tanggal Indonesia
+        |--------------------------------------------------------------------------
+        */
+
+        function formatTanggal(date) {
+
+            return new Date(date).toLocaleDateString(
+                'id-ID',
+                {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                }
+            );
+        }
     </script>
 @endsection

@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Villa;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -382,6 +383,120 @@ class BookingController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pelunasan berhasil.'
+        ]);
+    }
+    public function tambahHari(Request $request, $id)
+    {
+        $request->validate([
+            'jumlah_hari' => 'required|integer|min:1|max:30',
+        ]);
+
+        $booking = Booking::where('idbooking', $id)->firstOrFail();
+
+        $jumlahHari = (int) $request->jumlah_hari;
+
+        $checkin = Carbon::parse($booking->tglcekin);
+        $checkoutLama = Carbon::parse($booking->tglcekout);
+
+        // Hitung lama booking sebelumnya
+        $hariLama = $checkin->diffInDays($checkoutLama);
+
+        if ($hariLama <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tanggal checkout booking tidak valid.'
+            ], 422);
+        }
+
+        // Harga per hari dari kolom harga
+        $hargaPerHari = (float) $booking->harga;
+
+        if ($hargaPerHari <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Harga per hari tidak valid.'
+            ], 422);
+        }
+
+        // Checkout baru
+        $checkoutBaru = $checkoutLama->copy()->addDays($jumlahHari);
+
+        // Harga tambahan
+        $hargaTambahan = $hargaPerHari * $jumlahHari;
+
+        // Total harga baru
+        $totalHargaLama = (float) $booking->total_harga;
+        $totalHargaBaru = $totalHargaLama + $hargaTambahan;
+
+        // Simpan total bayar lama
+        $totalBayarLama = (float) $booking->total_bayar;
+
+        if ($booking->status_pembayaran == 'Lunas') {
+
+            // Tambahan hari belum dibayar
+            $statusPembayaranBaru = 'DP';
+
+            // total_bayar TIDAK ditambah
+            $totalBayarBaru = $totalBayarLama;
+
+        } else {
+
+            // Kalau sebelumnya belum lunas / DP
+            $statusPembayaranBaru = $booking->status_pembayaran;
+
+            // total bayar tetap
+            $totalBayarBaru = $totalBayarLama;
+        }
+
+        $booking->update([
+            'tglcekout' => $checkoutBaru,
+            'total_harga' => $totalHargaBaru,
+            'total_bayar' => $totalBayarBaru,
+            'status_pembayaran' => $statusPembayaranBaru,
+        ]);
+
+        $lastInvoice = Invoice::latest()->first();
+
+        $nomor = $lastInvoice
+            ? ((int) last(explode('/', $lastInvoice->nomor_invoice))) + 1
+            : 1;
+
+        $nomorInvoice = 'INV/' .
+            date('Ymd') .
+            '/' .
+            str_pad($nomor, 5, '0', STR_PAD_LEFT);
+
+        Invoice::create([
+            'idbooking' => $booking->idbooking,
+            'nomor_invoice' => $nomorInvoice,
+            'jenis' => 'Tambah Hari',
+            'nominal' => $hargaTambahan,
+            'status' => 'Unpaid',
+        ]);
+
+        return response()->json([
+            'success' => true,
+
+            'message' => 'Hari sewa berhasil ditambahkan.',
+
+            'data' => [
+                'tglcekout_lama' => $checkoutLama->format('Y-m-d H:i:s'),
+                'tglcekout_baru' => $checkoutBaru->format('Y-m-d H:i:s'),
+
+                'harga_per_hari' => $hargaPerHari,
+
+                'harga_tambahan' => $hargaTambahan,
+
+                'total_harga_lama' => $totalHargaLama,
+
+                'total_harga_baru' => $totalHargaBaru,
+
+                'total_bayar' => $totalBayarBaru,
+
+                'sisa_bayar' => $totalHargaBaru - $totalBayarBaru,
+
+                'status_pembayaran' => $statusPembayaranBaru,
+            ]
         ]);
     }
 }

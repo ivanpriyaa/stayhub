@@ -65,6 +65,9 @@ class DashboardControllers extends Controller
                     'note' => $b->note,
                     'status_pembayaran' => $b->status_pembayaran,
                     'nomor_invoice' => optional($b->invoices->first())->nomor_invoice,
+                    'customer' => optional($b->customer)->nama_customer,
+                    'harga' => (float) $b->harga,
+                    'total_harga' => (float) $b->total_harga,
                 ],
                 'color' => '#8A7650'
             ];
