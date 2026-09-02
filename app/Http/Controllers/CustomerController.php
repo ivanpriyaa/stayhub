@@ -63,7 +63,7 @@ class CustomerController extends Controller
 
         $customer->update([
             'nama_customer' => $request->nama_customer,
-            'alamat_customer' => $request->alamat_customer,
+            'alamat_customer' => $request->alamat_customer ?? '',
             'notelp_customer' => $request->notelp_customer
         ]);
 

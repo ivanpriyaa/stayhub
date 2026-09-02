@@ -243,7 +243,13 @@ class BookingController extends Controller
         $booking = Booking::where('idbooking', $id)->firstOrFail();
 
         // Cek apakah customer sudah ada
-        $customer = Customer::where('idcustomer', $request->idcustomer)->first();
+        $customer = Customer::where('idcustomer', $request->idcustomer)->firstOrFail();
+
+        $customer->update([
+            'nama_customer' => $request->nama_customer,
+            'notelp_customer' => $request->notelp_customer,
+            'alamat_customer' => $request->alamat_customer ?? '',
+        ]);
 
         if (!$customer) {
 
